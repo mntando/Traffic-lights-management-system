@@ -1,0 +1,43 @@
+project-root/
+├── app/                # Contains the Electron application
+│   ├──/                # Files for the Electron app
+│
+├── view/               # Contains the Vue frondend
+│   ├── public/         # Static assets like images, icons, etc.
+│   ├── src/            # Vue components, styles, and other assets
+│
+└── config/             # Configuration files (optional)
+    ├── .env            # Environment variables (e.g., API keys, port numbers)
+    └── settings.json   # Any JSON config shared between frontend and backend
+
+// Notes
+// - The Electron app will be the main application that runs on the user's computer
+// - The Vue frontend will be the user interface for the Electron app
+// - The Electron app will communicate with the Vue frontend using IPC
+
+Stats: color chart or just a bar with percentages for, label colors, show (operational, faulty, unresponsible)
+
+Search: input with search, dynamically show as you search, buttons for stats or control of selected robot
+
+Control: // NB: not in the sidebar but displays in sidebar contents; control given robot
+
+Reports: show reports e.g summary overview for whats needed (number of lamps, controller reconections, ), for overides with timestamps and reasons
+
+Alerts: show notifications for faults (robot pos, and problem) with a brief description if neccessary, import to a csv file
+
+More: manage robots (add/remove robots from the database),
+
+Settings: toggle: (power saving mode i.e if no traffic detected, smooth traffic i.e green for traffic if no car in another direction, decongestion mode, dark mode) 
+
+Account: show user (name, ), if main user can add/remove another user, about
+
+Map: show map, add markers for robots, show when hoved, click for more (open search with robot), zoom in/out with focus on CBD, (small transparent div at the bottom for display actions to do, whats being done)
+
+// Edge cases:
+
+// Rem:
+// - To buid the Vue frontend, run `npm run build` in the `view` directory when ready to package the Electron app
+
+// Tasks:
+Complete overview, search,
+Do transitions for contents page
