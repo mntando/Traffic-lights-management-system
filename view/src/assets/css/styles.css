@@ -7,11 +7,11 @@ input {
 }
 
 
-#tittle-bar { 
+#title-bar { 
     -webkit-app-region: drag; /* Allow dragging on this region */
 }
 
-.tittle-bar button, input {
+.title-bar button, input {
     -webkit-app-region: no-drag;
 }
 

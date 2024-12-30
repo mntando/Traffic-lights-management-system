@@ -34,14 +34,14 @@
 </template>
 
 <script>
-export default {
-  name: 'HelloWorld',
-  props: {
-    msg: String,
-  },
-};
+  export default {
+    name: 'HelloWorld',
+    props: {
+      msg: String,
+    },
+  };
 </script>
 
 <style scoped>
-/* Custom scoped styles for any specific tweaks */
+
 </style>

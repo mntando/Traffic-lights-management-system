@@ -1,10 +1,10 @@
 const { app, BrowserWindow, ipcMain } = require('electron');
 const path = require('path');
 
-let mainWindow;
+let win;
 
 app.on('ready', () => {
-    mainWindow = new BrowserWindow({
+    win = new BrowserWindow({
         width: 1300,
         height: 700,
         frame: false,  // Removes the default title bar
@@ -12,26 +12,28 @@ app.on('ready', () => {
         preload: path.join(__dirname, 'preload.js'), // Optional if using preload scripts
         contextIsolation: true, // Recommended for security
         nodeIntegration: false, // Avoid nodeIntegration for security
+        enableRemoteModule: false, // Avoid remote for security
+        sandbox: true,
         },
     });
     
-        ipcMain.on('minimize-window', () => {
-            win.minimize();
-        });
-        
-        ipcMain.on('maximize-window', () => {
-            win.isMaximized() ? win.unmaximize() : win.maximize();
-        });
-        
-        ipcMain.on('close-window', () => {
-            win.close();
-        });
+    ipcMain.on('minimize-window', () => {
+        win.minimize();
+    });
+    
+    ipcMain.on('maximize-window', () => {
+        win.isMaximized() ? win.unmaximize() : win.maximize();
+    });
+    
+    ipcMain.on('close-window', () => {
+        win.close();
+    });
 
     // Uncomment this to load production files instead
     // mainWindow.loadFile(path.join(__dirname, 'view/dist/index.html'));
 
     // Load Vue's development server in development
-    mainWindow.loadURL('http://localhost:8080');
+    win.loadURL('http://localhost:8080');
 
 });
 
