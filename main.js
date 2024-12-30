@@ -1,4 +1,4 @@
-const { app, BrowserWindow, } = require('electron');
+const { app, BrowserWindow, ipcMain } = require('electron');
 const path = require('path');
 
 let mainWindow;
@@ -14,6 +14,18 @@ app.on('ready', () => {
         nodeIntegration: false, // Avoid nodeIntegration for security
         },
     });
+    
+        ipcMain.on('minimize-window', () => {
+            win.minimize();
+        });
+        
+        ipcMain.on('maximize-window', () => {
+            win.isMaximized() ? win.unmaximize() : win.maximize();
+        });
+        
+        ipcMain.on('close-window', () => {
+            win.close();
+        });
 
     // Uncomment this to load production files instead
     // mainWindow.loadFile(path.join(__dirname, 'view/dist/index.html'));
