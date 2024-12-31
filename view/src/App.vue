@@ -1,20 +1,24 @@
 <template>
-  <div id="app" class="text-center">
+  <div id="app" class="flex flex-col text-center h-screen bg-gray-min text-gray-700 select-none">
     <TitleBar @minimize="minimizeWindow" @maximize="maximizeWindow" @close="closeWindow" :connection=false />
-    <img alt="Vue logo" src="./assets/logo-vue.png" class="w-24 mx-auto mb-4" />
-    <HelloWorld msg="Welcome to Your Vue.js App by MV" />
+    <div id="main" class="flex w-full h-full overflow-hidden">
+      <NavBar />
+      <MainPage />
+    </div>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue';
 import TitleBar from './components/TitleBar.vue';
+import NavBar from './components/NavBar.vue';
+import MainPage from './components/MainPage.vue';
 
 export default {
   name: 'App',
   components: {
-    HelloWorld,
     TitleBar,
+    NavBar,
+    MainPage,
   },
   methods: {
     minimizeWindow() {
@@ -28,7 +32,6 @@ export default {
     },
   },
 };
-
 </script>
 
 <style scoped>

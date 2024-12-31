@@ -1,5 +1,5 @@
 <template>
-  <div class="space-y-6 p-6">
+  <div class="space-y-6 p-6 w-full">
     <h1 class="text-3xl font-bold mb-6">{{ msg }}</h1>
     <p class="text-base mb-6">
       For a guide and recipes on how to configure / customize this project,<br />

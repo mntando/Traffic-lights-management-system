@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain } = require('electron');
+const { app, BrowserWindow, ipcMain, globalShortcut } = require('electron');
 const path = require('path');
 
 let win;
@@ -9,11 +9,12 @@ app.on('ready', () => {
         height: 700,
         frame: false,  // Removes the default title bar
         webPreferences: {
-        preload: path.join(__dirname, 'preload.js'), // Optional if using preload scripts
-        contextIsolation: true, // Recommended for security
-        nodeIntegration: false, // Avoid nodeIntegration for security
-        enableRemoteModule: false, // Avoid remote for security
-        sandbox: true,
+            preload: path.join(__dirname, 'preload.js'), // Optional if using preload scripts
+            contextIsolation: true, // Recommended for security
+            nodeIntegration: false, // Avoid nodeIntegration for security
+            enableRemoteModule: false, // Avoid remote for security
+            sandbox: true,
+            devTools: false, // Disable DevTools in production
         },
     });
     
@@ -27,6 +28,11 @@ app.on('ready', () => {
     
     ipcMain.on('close-window', () => {
         win.close();
+    });
+    
+    // Uncomment this for production
+    app.on('browser-window-blur', () => {
+        globalShortcut.unregisterAll();
     });
 
     // Uncomment this to load production files instead
