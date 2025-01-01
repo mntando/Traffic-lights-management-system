@@ -2,8 +2,8 @@
   <div id="app" class="flex flex-col text-center h-screen bg-gray-min text-gray-700 select-none">
     <TitleBar @minimize="minimizeWindow" @maximize="maximizeWindow" @close="closeWindow" :connection=false />
     <div id="main" class="flex w-full h-full overflow-hidden">
-      <NavBar />
-      <MainPage />
+      <NavBar v-model:activeAction="activeAction" @action="action($event)"/>
+      <MainPage v-model:activeAction="activeAction" />
     </div>
   </div>
 </template>
@@ -15,6 +15,11 @@ import MainPage from './components/MainPage.vue';
 
 export default {
   name: 'App',
+  data() {
+    return {
+      activeAction: 'overview',
+    };
+  },
   components: {
     TitleBar,
     NavBar,
@@ -29,6 +34,9 @@ export default {
     },
     closeWindow() {
       window.winAPI.close();
+    },
+    action(event) {
+      this.activeAction = event;
     },
   },
 };

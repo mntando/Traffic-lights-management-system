@@ -1,7 +1,7 @@
 <template>
 	<div class="flex flex-col items-center h-full">
 		<div class="flex items-center w-full px-4 mt-3">
-			<span class="ml-2 text-sm font-bold">TL</span>
+			<span class="ml-2 text-sm font-semibold">TL</span>
 		</div>
 		<div class="w-full px-2">
 			<div class="flex flex-col items-center w-full mt-3 border-t border-gray-300">
@@ -65,15 +65,21 @@
 <script>
 	export default {
 		name: 'NavBar',
+		props: {
+			activeAction: {
+				type: String,
+				required: true,
+			},
+		},
 		data() {
 			return {
-				activeButton: 'overview',
+				activeButton: this.activeAction,
 			};
 		},
 		methods: {
 			btnClick(action) {
 				this.activeButton = action;
-				this.$emit(action);
+				this.$emit('action', action);
 			},
 		},
 	};
