@@ -8,6 +8,7 @@ app.on('ready', () => {
         width: 1300,
         height: 700,
         frame: false,  // Removes the default title bar
+        icon: path.join(__dirname, 'view', 'src', 'assets', 'logo.ico'),
         webPreferences: {
             preload: path.join(__dirname, 'preload.js'), // Optional if using preload scripts
             contextIsolation: true, // Recommended for security
@@ -30,6 +31,7 @@ app.on('ready', () => {
         win.close();
     });
     
+    // TODO: remove the ctrl+R to reload app
     // Uncomment this for production
     app.on('browser-window-blur', () => {
         globalShortcut.unregisterAll();

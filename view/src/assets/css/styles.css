@@ -15,6 +15,31 @@ input {
     -webkit-app-region: no-drag;
 }
 
+.scrollable {
+    overflow: auto; /* Enable scrolling */
+    position: relative; /* Required for hover detection */
+}
+
+.scrollable::-webkit-scrollbar {
+    width: 5px; /* Set the width of the scrollbar */
+    height: 5px; /* Set the height of the scrollbar */
+    background-color: transparent; /* Transparent scrollbar background */
+}
+
+.scrollable::-webkit-scrollbar-thumb {
+    background-color: rgba(160, 174, 192, 0); /* Fully transparent by default */
+    border-radius: 1px; /* Rounded edges */
+    transition: background-color 0.5s ease-in-out; /* Smooth fade effect */
+}
+
+.scrollable:hover::-webkit-scrollbar-thumb {
+    background-color: rgba(160, 174, 192, 0.5); /* Semi-transparent thumb when hovering */
+}
+
+.scrollable::-webkit-scrollbar-track {
+    background-color: transparent; /* Transparent track */
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;

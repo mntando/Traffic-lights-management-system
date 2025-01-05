@@ -11,11 +11,11 @@ project-root/
     └── settings.json   # Any JSON config shared between frontend and backend
 
 // Notes
-// - The Electron app will be the main application that runs on the user's computer
-// - The Vue frontend will be the user interface for the Electron app
-// - The Electron app will communicate with the Vue frontend using IPC
+- The Electron app will be the main application that runs on the user's computer
+- The Vue frontend will be the user interface for the Electron app
+- The Electron app will communicate with the Vue frontend using IPC
 
-Stats: color chart or just a bar with percentages for, label colors, show (operational, faulty, unresponsible)
+Stats: color chart or just a bar with percentages for, label colors, show (functional, faulty, unresponsible)
 
 Search: input with search, dynamically show as you search, buttons for stats or control of selected robot
 
@@ -34,10 +34,12 @@ Account: show user (name, ), if main user can add/remove another user, about
 Map: show map, add markers for robots, show when hoved, click for more (open search with robot), zoom in/out with focus on CBD, (small transparent div at the bottom for display actions to do, whats being done)
 
 // Edge cases:
+-
 
 // Rem:
-// - To buid the Vue frontend, run `npm run build` in the `view` directory when ready to package the Electron app
+- To buid the Vue frontend, run `npm run build` in the `view` directory when ready to package the Electron app
 
 // Tasks:
-Complete overview, search,
-Do transitions for contents page
+- Complete overview, search,
+- Do transitions for contents page
+- MapDiv to emit to MainPage onclick on robots (this emit to change components on MainPage#side-bar)

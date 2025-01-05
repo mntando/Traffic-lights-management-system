@@ -1,9 +1,9 @@
 <template>
-  <div id="app" class="flex flex-col text-center h-screen bg-gray-min text-gray-700 select-none">
+  <div id="app" class="flex flex-col text-center w-screen h-screen bg-gray-min text-gray-700 select-none">
     <TitleBar @minimize="minimizeWindow" @maximize="maximizeWindow" @close="closeWindow" :connection=false />
-    <div id="main" class="flex w-full h-full overflow-hidden">
+    <div id="main" class="flex w-full flex-grow overflow-hidden">
       <NavBar v-model:activeAction="activeAction" @action="action($event)"/>
-      <MainPage v-model:activeAction="activeAction" />
+      <MainPage v-model:activeAction="activeAction"/>
     </div>
   </div>
 </template>

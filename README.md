@@ -47,7 +47,7 @@ Ensure you have the following installed on your system:
 
 3. **Run the Application**:
    ```bash
-   npm run serve
+   npm run dev
    ```
 
 4. **Hardware Setup**:
@@ -112,6 +112,6 @@ This project is licensed under the [MIT License](LICENSE).
 ## Contact
 
 For any questions or suggestions, please contact:
-- **Author**: Mntando
-- **Email**: [your-email@example.com]
+- **Author**: MV
+- **Email**: [mvntando@gmail.com]
 - **GitHub**: [github.com/mntando](https://github.com/mntando)

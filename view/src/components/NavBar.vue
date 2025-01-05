@@ -1,5 +1,5 @@
 <template>
-	<div class="flex flex-col items-center h-full">
+	<div class="flex flex-col flex-grow items-center">
 		<div class="flex items-center w-full px-4 mt-3">
 			<span class="ml-2 text-sm font-semibold">TL</span>
 		</div>
