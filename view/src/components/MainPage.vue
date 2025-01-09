@@ -3,51 +3,49 @@
 		<div id="side-bar" class="w-1/3 text-left">
 			<component :is="activeComponent" :robots="robots"></component>
 		</div>
-		<MapDiv class="flex w-2/3 border-l border-gray-300" />
+		<RobotsMap :robotsList="robots.list" class="flex w-2/3 border-l border-gray-300 overflow-hidden" />
 	</div>
 </template>
 
 <script>
-	import MapDiv from './MapDiv.vue';
+	import RobotsMap from './RobotsMap.vue';
 	import OverviewPage from './side-bar/Overview.vue';
 	import SearchPage from './side-bar/Search.vue';
 	import ReportsPage from './side-bar/Reports.vue';
 	import AlertsPage from './side-bar/Alerts.vue';
 	import MorePage from './side-bar/More.vue';
-	import SettingsPage from './side-bar/Settings.vue';
 	import AccountPage from './side-bar/Account.vue';
 
 	export default {
 		name: 'MainPage',
 		components: {
-			MapDiv,
+			RobotsMap,
 			OverviewPage,
 			SearchPage,
 			ReportsPage,
 			AlertsPage,
 			MorePage,
-			SettingsPage,
 			AccountPage,
 		},
 		data() {
 			return {
-				// TODO: listen for this online
+				// TODO: listen for this data online
 				robots: {
 					data: {
-						total: 200,
-						functional: 183,
-						faulty: 17,
-						notResponding: 0,
+						total: 8,
+						functional: 5,
+						faulty: 2,
+						unresponsive: 1,
 					},
 					list: [
-						{ name: "JMN Str. & Masotsha Ave.", code: 0 },
-						{ name: "Fort Str. & 10th Ave.", code: 2 },
-						{ name: "Fife Str. & 4th Ave.", code: 31 },
-						{ name: "Lobengula Str. & 4th Ave.", code: 7 },
-						{ name: "Fort Str. & L.T Ave.", code: 19 },
-						{ name: "G.S Str. & 13th Ave.", code: 22 },
-						{ name: "JMN Str. & 15th Ave.", code: 1 },
-						{ name: "Fife Str. & 15th Ave.", code: 11 },
+						{ name: "Traffic Light 1", code: 0 },	// TODO: pass ids instead of robots name
+						{ name: "Traffic Light 2", code: 2 },
+						{ name: "Traffic Light 3", code: 13 },
+						{ name: "Traffic Light 4", code: 7 },
+						{ name: "Traffic Light 5", code: 17 },
+						{ name: "Traffic Light 6", code: 6 },
+						{ name: "Traffic Light 7", code: 1 },
+						{ name: "Traffic Light 8", code: 11 },
 					]
 				},
 			};

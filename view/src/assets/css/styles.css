@@ -16,8 +16,9 @@ input {
 }
 
 .scrollable {
-    overflow: auto; /* Enable scrolling */
+    overflow: hidden auto; /* Enable scrolling */
     position: relative; /* Required for hover detection */
+    scrollbar-gutter: stable both-edges; /* Prevent layout shifts caused by scrollbars */
 }
 
 .scrollable::-webkit-scrollbar {

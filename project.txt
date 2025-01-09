@@ -19,15 +19,15 @@ Stats: color chart or just a bar with percentages for, label colors, show (funct
 
 Search: input with search, dynamically show as you search, buttons for stats or control of selected robot
 
-Control: // NB: not in the sidebar but displays in sidebar contents; control given robot
+Control: (move to More) // NB: not in the sidebar but displays in sidebar contents; control given robot
 
 Reports: show reports e.g summary overview for whats needed (number of lamps, controller reconections, ), for overides with timestamps and reasons
 
 Alerts: show notifications for faults (robot pos, and problem) with a brief description if neccessary, import to a csv file
 
-More: manage robots (add/remove robots from the database),
+More: robot control section (ontop), manage robots (add/remove robots from the database),
 
-Settings: toggle: (power saving mode i.e if no traffic detected, smooth traffic i.e green for traffic if no car in another direction, decongestion mode, dark mode) 
+Settings: (move to More) toggle: (power saving mode i.e if no traffic detected, smooth traffic i.e green for traffic if no car in another direction, decongestion mode, dark mode)
 
 Account: show user (name, ), if main user can add/remove another user, about
 
@@ -38,8 +38,18 @@ Map: show map, add markers for robots, show when hoved, click for more (open sea
 
 // Rem:
 - To buid the Vue frontend, run `npm run build` in the `view` directory when ready to package the Electron app
+- Uninstall leaflet-mbtiles
 
 // Tasks:
-- Complete overview, search,
-- Do transitions for contents page
+- Complete overview, search, (almost done)
+- Do transitions for contents page (someday)
+- Connection button
+
+// Ideas:
 - MapDiv to emit to MainPage onclick on robots (this emit to change components on MainPage#side-bar)
+- Add control svg to RobotsList <li> tags (onclick to open control sidebar), onclick on <li> to show robot on map
+- SideBar - control a single robot at a time, click on robot on map show label with the control svg
+
+// Tommorow:
+- Do searching on search, filtering on overview, Map and the robots database
+
