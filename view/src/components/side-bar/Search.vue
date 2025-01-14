@@ -37,9 +37,6 @@
 		},
 		computed: {
 			filteredTrafficLights() {
-				if (!this.searchQuery.trim()) {
-					return [];
-				}
 				return this.trafficLights.list.filter(trafficLight =>
 					trafficLight.name.toLowerCase().includes(this.searchQuery.toLowerCase())
 				);

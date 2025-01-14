@@ -2,24 +2,25 @@
 	<div class="map-container">
 		<div id="map" class="reletive w-full h-full">
 			<div class="absolute top-4 left-4 flex flex-col space-y-2">
-				<button @click="zoomIn" class="bg-white shadow p-2 border border-gray-300 rounded-full hover:bg-gray-50 transition duration-100 ease-in-out transform hover:scale-110" aria-label="Zoom In">
+				<button @click="zoomIn" class="bg-white shadow p-2 border border-gray-300 rounded-full transition duration-100 ease-in-out transform hover:scale-110" aria-label="Zoom In">
 					<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
 					</svg>
 				</button>
-				<button @click="zoomOut" class="bg-white shadow p-2 border border-gray-300 rounded-full hover:bg-gray-50 transition duration-100 ease-in-out transform hover:scale-110" aria-label="Zoom Out">
+				<button @click="zoomOut" class="bg-white shadow p-2 border border-gray-300 rounded-full transition duration-100 ease-in-out transform hover:scale-110" aria-label="Zoom Out">
 					<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4" />
 					</svg>
 				</button>
-				<button @click="goToTown" class="bg-white shadow p-2 border border-gray-300 rounded-full hover:bg-gray-50 transition duration-100 ease-in-out transform hover:scale-110 text-blue-500" aria-label="Go to Location">
-					<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-						<circle cx="12" cy="12" r="9" />
+				<button @click="clicked" class="bg-white shadow p-2 border border-gray-300 rounded-full transition duration-100 ease-in-out transform hover:scale-110" aria-label="Full Screen">
+					<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4h6M4 4v6M20 4h-6M20 4v6M4 20h6M4 20v-6M20 20h-6M20 20v-6" />
+					</svg>
+				</button>
+				<button @click="goToTown" class="bg-white shadow p-2 border border-gray-300 rounded-full transition duration-100 ease-in-out transform hover:scale-110 text-blue-500" aria-label="Go to Location">
+					<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+						<path d="M 12 3	A 9 9 0 1 1 12 21 A 9 9 0 1 1 12 3 M 12 2 L 12 -8 M 12 22 L 12 32 M 2 12 L -8 12 M 22 12 L 32 12 M 12 9	A 3 3 0 1 1 12 15 A 3 3 0 1 1 12 9" fill="none" stroke="currentColor" stroke-width="2"/>
 						<circle cx="12" cy="12" r="3" fill="currentColor" />
-						<line x1="12" y1="2" x2="12" y2="-8" />
-						<line x1="12" y1="22" x2="12" y2="32" />
-						<line x1="2" y1="12" x2="-8" y2="12" />
-						<line x1="22" y1="12" x2="32" y2="12" />
 					</svg>
 				</button>
 			</div>
@@ -48,7 +49,7 @@
 		},
 		computed: {
 			trafficLightMarker() {
-				return '<div class="flex p-1 w-full h-full border border-red-500 rounded-full"><div class="justify-center w-full h-full bg-red-500 rounded-full"></div></div>';
+				return '<div class="flex p-1 w-full h-full border border-gray-500 rounded-full transition duration-100 ease-in-out transform hover:scale-110"><div class="justify-center w-full h-full bg-gray-500 rounded-full"></div></div>';
 			},
 			trafficLights() {
 				return this.trafficLightsList.map((trafficLight, index) => {
@@ -115,6 +116,9 @@
 				if (this.map) {
 					this.map.setView(this.town, 17);
 				}
+			},
+			clicked() {
+				console.log("mv");
 			},
 			// Imported methods
 			msg,
