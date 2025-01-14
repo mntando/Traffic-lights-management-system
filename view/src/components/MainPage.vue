@@ -1,9 +1,9 @@
 <template>
 	<div class="flex w-full flex-grow bg-white border-t border-l border-gray-300 rounded-tl-xl">
 		<div id="side-bar" class="w-1/3 text-left">
-			<component :is="activeComponent" :robots="robots"></component>
+			<component :is="activeComponent" :trafficLights="trafficLights"></component>
 		</div>
-		<RobotsMap :robotsList="robots.list" class="flex w-2/3 border-l border-gray-300 overflow-hidden" />
+		<RobotsMap :trafficLightsList="trafficLights.list" class="flex w-2/3 border-l border-gray-300 overflow-hidden" />
 	</div>
 </template>
 
@@ -30,7 +30,7 @@
 		data() {
 			return {
 				// TODO: listen for this data online
-				robots: {
+				trafficLights: {
 					data: {
 						total: 8,
 						functional: 5,
@@ -38,7 +38,7 @@
 						unresponsive: 1,
 					},
 					list: [
-						{ name: "Traffic Light 1", code: 0 },	// TODO: pass ids instead of robots name
+						{ name: "Traffic Light 1", code: 0 },	// TODO: pass ids instead of trafficLight names
 						{ name: "Traffic Light 2", code: 2 },
 						{ name: "Traffic Light 3", code: 13 },
 						{ name: "Traffic Light 4", code: 7 },

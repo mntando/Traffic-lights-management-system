@@ -9,37 +9,37 @@
 </template>
 
 <script>
-import TitleBar from './components/TitleBar.vue';
-import NavBar from './components/NavBar.vue';
-import MainPage from './components/MainPage.vue';
+	import TitleBar from './components/TitleBar.vue';
+	import NavBar from './components/NavBar.vue';
+	import MainPage from './components/MainPage.vue';
 
-export default {
-	name: 'App',
-	data() {
-		return {
-		activeAction: 'overview',
-		};
-	},
-	components: {
-		TitleBar,
-		NavBar,
-		MainPage,
-	},
-	methods: {
-		minimizeWindow() {
-			window.winAPI.minimize();
+	export default {
+		name: 'App',
+		data() {
+			return {
+			activeAction: 'overview',
+			};
 		},
-		maximizeWindow() {
-			window.winAPI.maximize();
+		components: {
+			TitleBar,
+			NavBar,
+			MainPage,
 		},
-		closeWindow() {
-			window.winAPI.close();
+		methods: {
+			minimizeWindow() {
+				window.winAPI.minimize();
+			},
+			maximizeWindow() {
+				window.winAPI.maximize();
+			},
+			closeWindow() {
+				window.winAPI.close();
+			},
+			action(event) {
+				this.activeAction = event;
+			},
 		},
-		action(event) {
-			this.activeAction = event;
-		},
-	},
-};
+	};
 </script>
 
 <style scoped>

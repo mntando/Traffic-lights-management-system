@@ -50,6 +50,17 @@ Map: show map, add markers for robots, show when hoved, click for more (open sea
 - Add control svg to RobotsList <li> tags (onclick to open control sidebar), onclick on <li> to show robot on map
 - SideBar - control a single robot at a time, click on robot on map show label with the control svg
 
+// Errors:
+- Error: Cannot read properties of null (reading '_latLngToNewLayerPoint')
+            TypeError: Cannot read properties of null (reading '_latLngToNewLayerPoint')
+                at NewClass._animateZoom (webpack-internal:///./node_modules/leaflet/dist/leaflet-src.js:9125:27)
+                at NewClass.fire (webpack-internal:///./node_modules/leaflet/dist/leaflet-src.js:577:16)
+                at NewClass._animateZoom (webpack-internal:///./node_modules/leaflet/dist/leaflet-src.js:4306:12)
+                at NewClass.eval (webpack-internal:///./node_modules/leaflet/dist/leaflet-src.js:4286:61)
+- Error: 
+
 // Tommorow:
-- Do searching on search, filtering on overview, Map and the robots database
+- display the percentages correctly
+- do the traffic lights database and implementation, figure out how all the parameters will be passed to components, finish the map
+- Idea: move the trafficLightIcon to the trafficLights code/data logic so as to be able to change icon color
 

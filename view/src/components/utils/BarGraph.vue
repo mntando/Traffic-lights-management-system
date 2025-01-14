@@ -3,42 +3,42 @@
 		<div class="border border-gray-300 rounded-lg">
 			<div class="bar-graph">
 				<div class="bar bg-green-500" :style="{ width: bar1Width }">
-					<span class="percentage" :class="{ 'fade-in': showPercentages }">{{ bar1Width }}</span>
+					<span class="percentage" :class="{ 'fade-in': showPercentages }">{{ targetWidths.functional.toFixed(1) }}</span>
 				</div>
 				<div class="bar bg-red-500" :style="{ width: bar2Width }">
-					<span class="percentage" :class="{ 'fade-in': showPercentages }">{{ bar2Width }}</span>
+					<span class="percentage" :class="{ 'fade-in': showPercentages }">{{ targetWidths.faulty.toFixed(1) }}</span>
 				</div>
 				<div class="bar bg-gray-500" :style="{ width: bar3Width }">
-					<span class="percentage" :class="{ 'fade-in': showPercentages }">{{ bar3Width }}</span>
+					<span class="percentage" :class="{ 'fade-in': showPercentages }">{{ targetWidths.unresponsive.toFixed(1) }}</span>
 				</div>
 			</div>
 			<div class="flex justify-between text-xs font-medium p-3">
 				<div class="flex items-center">
-					<span class="inline-block w-2 h-2 mr-1 bg-green-500 rounded-full"></span>
+					<span class="inline-block w-3 h-3 mr-1 bg-green-500 rounded-full"></span>
 					<span>Functional:</span>
-					<span class="ml-1">{{ robotsData.functional }}</span>
+					<span class="ml-1">{{ trafficLightsData.functional }}</span>
 				</div>
 				<div class="flex items-center">
-					<span class="inline-block w-2 h-2 mr-1 bg-red-500 rounded-full"></span>
+					<span class="inline-block w-3 h-3 mr-1 bg-red-500 rounded-full"></span>
 					<span>Faulty:</span>
-					<span class="ml-1">{{ robotsData.faulty }}</span>
+					<span class="ml-1">{{ trafficLightsData.faulty }}</span>
 				</div>
 				<div class="flex items-center">
-					<span class="inline-block w-2 h-2 mr-1 bg-gray-500 rounded-full"></span>
+					<span class="inline-block w-3 h-3 mr-1 bg-gray-500 rounded-full"></span>
 					<span>Unresponsive:</span>
-					<span class="ml-1">{{ robotsData.unresponsive }}</span>
+					<span class="ml-1">{{ trafficLightsData.unresponsive }}</span>
 				</div>
 			</div>
 		</div>
-		<p class="text-xs font-medium mt-2">Total Traffic Lights: {{ robotsData.total }}</p>
+		<p class="text-xs font-medium mt-2">Total Traffic Lights: {{ trafficLightsData.total }}</p>
 	</div>
 </template>
-	
-	<script>
+
+<script>
 	export default {
 		name: "BarGraph",
 		props: {
-			robotsData: {
+			trafficLightsData: {
 					type: Object,
 					required: true,
 			},
@@ -77,9 +77,9 @@
 		computed: {
 			targetWidths() {
 				return {
-					functional: this.robotsData.functional / this.robotsData.total * 100,
-					faulty: this.robotsData.faulty / this.robotsData.total * 100,
-					unresponsive: this.robotsData.unresponsive / this.robotsData.total * 100,
+					functional: this.trafficLightsData.functional / this.trafficLightsData.total * 100,
+					faulty: this.trafficLightsData.faulty / this.trafficLightsData.total * 100,
+					unresponsive: this.trafficLightsData.unresponsive / this.trafficLightsData.total * 100,
 				};
 			},
 		},
