@@ -30,7 +30,7 @@
 
 <script>
 	import L from "leaflet";
-	import { msg } from '@/utils/utils.js';
+	import { message } from "@/utils/utils.js";
 
 	export default {
 		name: "RobotsMap",
@@ -49,7 +49,9 @@
 		},
 		computed: {
 			trafficLightMarker() {
-				return '<div class="flex p-1 w-full h-full border border-gray-500 rounded-full transition duration-100 ease-in-out transform hover:scale-110"><div class="justify-center w-full h-full bg-gray-500 rounded-full"></div></div>';
+				return `<div class="flex p-1 w-full h-full border border-gray-500 rounded-full transition duration-100 ease-in-out transform hover:scale-110">
+						<div class="justify-center w-full h-full bg-gray-500 rounded-full"></div>
+					</div>`;
 			},
 			trafficLights() {
 				return this.trafficLightsList.map((trafficLight, index) => {
@@ -67,7 +69,11 @@
 					return {
 						lat: coordinates.lat,
 						lng: coordinates.lng,
-						label: `<span class='text-lg'>${trafficLight.name}</span><br><span class='text-red-500'>${msg(trafficLight.code)}</span><br><a class='hover:underline'>more</a>`
+						label: `<span class='text-lg'>${trafficLight.name}</span>
+							<br>
+							<span class="text-${message(trafficLight.code).color}-500">${message(trafficLight.code).msg}</span>
+							<br>
+							<a class='hover:underline'>more</a>`
 					}
 				})
 			}
@@ -121,7 +127,7 @@
 				console.log("mv");
 			},
 			// Imported methods
-			msg,
+			message,
 		},
 		beforeUnmount() {
 			if (this.map) {

@@ -1,7 +1,7 @@
 const Database = require('better-sqlite3');
 
 // Connect to the database (it will create the file if it doesn't exist)
-const db = new Database('traffic-lights.db');
+const db = Database('traffic-lights.db');
 
 // Create the TrafficLights table if it doesn't exist
 db.prepare(`

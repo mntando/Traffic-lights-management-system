@@ -1,7 +1,4 @@
-* {
-    cursor: default !important;
-}
-
+/* All styles */
 input {
     cursor: auto !important;
 }
@@ -13,6 +10,7 @@ input {
 
 .title-bar button, input {
     -webkit-app-region: no-drag;
+    cursor: default;
 }
 
 .scrollable {

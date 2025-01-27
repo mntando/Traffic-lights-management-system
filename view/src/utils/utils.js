@@ -1,7 +1,8 @@
 // Status code
-export function msg(code) {
+export function message(code) {
     const faults = [];
     let ledFaults = [];
+    let color = 'red';
 
     if (!(code & 0b00001)) { faults.push('Not operational'); }
     if (code & 0b10000) { faults.push('Unresponsive'); }
@@ -12,5 +13,13 @@ export function msg(code) {
     if (ledFaults.length > 0) {
         faults.push(`${ledFaults.join(', ')} ${ledFaults.length > 1 ? 'LEDs' : 'LED'}`);
     }
-    return faults.length === 0 ? 'Functional' : `Faults: ${faults.join(', ')}`;
+
+    let msg = faults.length === 0 ? 'Functional' : `Faults: ${faults.join(', ')}`;
+    if (msg === 'Functional') {
+        color = 'green';
+    } else if (faults.includes('Unresponsive')) {
+        color = 'gray';
+    }
+
+    return { msg, color };
 }
