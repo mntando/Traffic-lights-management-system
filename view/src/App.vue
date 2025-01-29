@@ -17,7 +17,7 @@
 		name: 'App',
 		data() {
 			return {
-			activeAction: 'overview',
+				activeAction: 'overview',
 			};
 		},
 		components: {

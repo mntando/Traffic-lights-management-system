@@ -29,31 +29,49 @@
 		},
 		data() {
 			return {
-				// TODO: listen for this data online
 				trafficLights: {
 					data: {
-						total: 8,
-						functional: 5,
-						faulty: 2,
-						unresponsive: 1,
+						total: 1,	// Zero value is not allowed, breaks the bar graph
+						functional: 0,
+						faulty: 0,
+						unresponsive: 0,
 					},
-					list: [
-						{ name: "Traffic Light 1", code: 0 },	// TODO: pass ids instead of trafficLight names
-						{ name: "Traffic Light 2", code: 2 },
-						{ name: "Traffic Light 3", code: 13 },
-						{ name: "Traffic Light 4", code: 7 },
-						{ name: "Traffic Light 5", code: 17 },
-						{ name: "Traffic Light 6", code: 6 },
-						{ name: "Traffic Light 7", code: 1 },
-						{ name: "Traffic Light 8", code: 11 },
-					]
+					list: [],
 				},
 			};
 		},
+		
 		props: {
 			activeAction: {
 				type: String,
 				required: true,
+			},
+		},
+		async mounted() {
+			await this.fetchTrafficLights();
+		},
+		methods: {
+			async fetchTrafficLights() {
+				// Fetch traffic lights data from the database
+				const allTrafficlights = await window.trafficLightsAPI.getAll();
+
+				// Map the hardcoded `code` values to the fetched traffic lights
+				const hardcodedCodes = [0, 2, 13, 7, 17, 6, 1, 11]; // Retain these codes
+				const trafficLightsWithCodes = allTrafficlights.map((trafficLight, index) => ({
+					id: trafficLight.id,
+					name: trafficLight.name,
+					location: trafficLight.location,
+					code: hardcodedCodes[index] || null, // Map codes; fallback to null if out of range
+				}));
+
+				// Update the trafficLights object
+				this.trafficLights.list = trafficLightsWithCodes;
+
+				// Update summary data
+				this.trafficLights.data.total = 8;
+				this.trafficLights.data.functional = 5; // Hardcoded for now
+				this.trafficLights.data.faulty = 2;     // Hardcoded for now
+				this.trafficLights.data.unresponsive = 1; // Hardcoded for now
 			},
 		},
 		computed: {

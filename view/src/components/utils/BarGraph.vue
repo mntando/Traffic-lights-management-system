@@ -51,17 +51,28 @@
 				showPercentages: false, // State to control percentage visibility
 			};
 		},
+		watch: {
+			targetWidths: {
+				handler() {
+					this.animateBars();
+				},
+				deep: true,
+			},
+		},
 		mounted() {
-			this.animateBar(1, this.targetWidths.functional);
-			this.animateBar(2, this.targetWidths.faulty);
-			this.animateBar(3, this.targetWidths.unresponsive);
-	
-			// Show percentages after all animations
-			setTimeout(() => {
-				this.showPercentages = true;
-			}, 800); // Delay matches the animation duration
+			this.animateBars();
 		},
 		methods: {
+			animateBars() {
+				this.animateBar(1, this.targetWidths.functional);
+				this.animateBar(2, this.targetWidths.faulty);
+				this.animateBar(3, this.targetWidths.unresponsive);
+
+				// Show percentages after all animations
+				setTimeout(() => {
+					this.showPercentages = true;
+				}, 800); // Delay matches the animation duration
+			},
 			animateBar(barNumber, targetWidth) {
 				let width = 0;
 				const interval = setInterval(() => {
