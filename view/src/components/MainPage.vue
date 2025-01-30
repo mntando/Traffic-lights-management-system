@@ -3,7 +3,8 @@
 		<div id="side-bar" class="w-1/3 text-left">
 			<component :is="activeComponent" :trafficLights="trafficLights"></component>
 		</div>
-		<RobotsMap :trafficLightsList="trafficLights.list" class="flex w-2/3 border-l border-gray-300 overflow-hidden" />
+		<div v-if="loading">loading map...</div>
+		<RobotsMap v-if="!loading" :trafficLightsList="trafficLights.list" class="flex w-2/3 border-l border-gray-300 overflow-hidden" />
 	</div>
 </template>
 
@@ -38,6 +39,7 @@
 					},
 					list: [],
 				},
+				loading: true, // Start with loading
 			};
 		},
 		
@@ -53,7 +55,7 @@
 		methods: {
 			async fetchTrafficLights() {
 				// Fetch traffic lights data from the database
-				const allTrafficlights = await window.trafficLightsAPI.getAll();
+				const allTrafficlights = await window.dbAPI.getAll();
 
 				// Map the hardcoded `code` values to the fetched traffic lights
 				const hardcodedCodes = [0, 2, 13, 7, 17, 6, 1, 11]; // Retain these codes
@@ -72,6 +74,8 @@
 				this.trafficLights.data.functional = 5; // Hardcoded for now
 				this.trafficLights.data.faulty = 2;     // Hardcoded for now
 				this.trafficLights.data.unresponsive = 1; // Hardcoded for now
+
+				this.loading = false; // Only show component when data is ready
 			},
 		},
 		computed: {

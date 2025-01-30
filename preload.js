@@ -13,7 +13,7 @@ contextBridge.exposeInMainWorld('winAPI', {
 });
 
 // Database functionality
-contextBridge.exposeInMainWorld('trafficLightsAPI', {
+contextBridge.exposeInMainWorld('dbAPI', {
 	get: (id) => ipcRenderer.invoke('get-traffic-light', id),
 	getAll: () => ipcRenderer.invoke('get-all-traffic-lights'),
 	add: (name, location) => ipcRenderer.invoke('add-traffic-light', { name, location }),

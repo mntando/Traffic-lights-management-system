@@ -34,7 +34,6 @@
 
     export default {
         name: "RobotsMap",
-        
         props: {
             trafficLightsList: {
                 type: Array,
@@ -55,21 +54,11 @@
                     </div>`;
             },
             trafficLights() {
-                return this.trafficLightsList.map((trafficLight, index) => {
-                    const coordinates = [
-                        { lat: -20.15078, lng: 28.58455 },
-                        { lat: -20.15181, lng: 28.58299 },
-                        { lat: -20.15350, lng: 28.58377 },
-                        { lat: -20.15408, lng: 28.58624 },
-                        { lat: -20.15461, lng: 28.58219 },
-                        { lat: -20.15523, lng: 28.58461 },
-                        { lat: -20.15694, lng: 28.58539 },
-                        { lat: -20.15304, lng: 28.58779 },
-                    ][index];
-
+                return this.trafficLightsList.map((trafficLight) => {
+                    const location = JSON.parse(trafficLight.location);
                     return {
-                        lat: coordinates.lat,
-                        lng: coordinates.lng,
+                        lat: location.lat,
+                        lng: location.lng,
                         label: `<span class='text-lg'>${trafficLight.name}</span>
                             <br>
                             <span class="text-${message(trafficLight.code).color}-500">${message(trafficLight.code).msg}</span>
@@ -103,9 +92,10 @@
                     iconSize: [35, 35],
                 });
 
+
                 this.trafficLights.forEach((light) => {
-                    const marker = L.marker([light.lat, light.lng], { icon: trafficLightIcon })
-                    .bindPopup(light.label)
+					const marker = L.marker([light.lat, light.lng], { icon: trafficLightIcon })
+					.bindPopup(light.label)
                     .addTo(this.map);
                     this.markers.push(marker);
                 });
