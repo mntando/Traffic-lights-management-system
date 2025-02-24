@@ -3,8 +3,8 @@
 		<div id="side-bar" class="w-1/3 text-left">
 			<component :is="activeComponent" :trafficLights="trafficLights"></component>
 		</div>
-		<div v-if="loading">loading map...</div>
-		<RobotsMap v-if="!loading" :trafficLightsList="trafficLights.list" class="flex w-2/3 border-l border-gray-300 overflow-hidden" />
+		<div v-if="!loadMap">loading map...</div>
+		<RobotsMap v-if="loadMap" :trafficLightsList="trafficLights.list" class="flex w-2/3 border-l border-gray-300 overflow-hidden" />
 	</div>
 </template>
 
@@ -39,7 +39,7 @@
 					},
 					list: [],
 				},
-				loading: true, // Start with loading
+				loadMap: false, // Start with loading
 			};
 		},
 		
@@ -63,7 +63,7 @@
 					id: trafficLight.id,
 					name: trafficLight.name,
 					location: trafficLight.location,
-					code: hardcodedCodes[index] || null, // Map codes; fallback to null if out of range
+					code: hardcodedCodes[index + 1] || null, // Map codes; fallback to null if out of range
 				}));
 
 				// Update the trafficLights object
@@ -75,7 +75,7 @@
 				this.trafficLights.data.faulty = 2;     // Hardcoded for now
 				this.trafficLights.data.unresponsive = 1; // Hardcoded for now
 
-				this.loading = false; // Only show component when data is ready
+				this.loadMap = true; // Only show component when data is ready
 			},
 		},
 		computed: {
