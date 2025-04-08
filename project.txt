@@ -10,6 +10,11 @@ project-root/
     ├── .env            # Environment variables (e.g., API keys, port numbers)
     └── settings.json   # Any JSON config shared between frontend and backend
 
+// App
+- npm run dev (in the app directory) // to run the Electron app
+- npx tailwindcss -i ./src/assets/css/styles.css -o ./src/assets/css/tailwind.css --watch (in the view directory) // to run tailwindcss
+- npx electron sqlite.js // to run the Electron app with SQLite
+
 // Notes
 - The Electron app will be the main application that runs on the user's computer
 - The Vue frontend will be the user interface for the Electron app
@@ -46,9 +51,11 @@ Map: show map, add markers for robots, show when hoved, click for more (open sea
 - Connection button
 
 // Ideas:
+- Get data from MainPage, since it has to render different components (Overview and RobotsMap)
 - MapDiv to emit to MainPage onclick on robots (this emit to change components on MainPage#side-bar)
 - Add control svg to RobotsList <li> tags (onclick to open control sidebar), onclick on <li> to show robot on map
 - SideBar - control a single robot at a time, click on robot on map show label with the control svg
+- Show severity levels (e.g., critical faults in red, minor ones in orange) - Provide expand/collapse functionality for detailed fault descriptions.
 
 // Errors:
 - Error: Cannot read properties of null (reading '_latLngToNewLayerPoint')
@@ -57,7 +64,7 @@ Map: show map, add markers for robots, show when hoved, click for more (open sea
                 at NewClass.fire (webpack-internal:///./node_modules/leaflet/dist/leaflet-src.js:577:16)
                 at NewClass._animateZoom (webpack-internal:///./node_modules/leaflet/dist/leaflet-src.js:4306:12)
                 at NewClass.eval (webpack-internal:///./node_modules/leaflet/dist/leaflet-src.js:4286:61)
-- Error: npm audit...found vulnerabilities (3 high)
+- Error: npm audit (in the view directory)
             run `npm audit fix` to fix them, or `npm audit` for details
 
 // Tommorow:

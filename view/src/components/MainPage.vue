@@ -4,7 +4,7 @@
 			<component :is="activeComponent" :trafficLights="trafficLights"></component>
 		</div>
 		<div v-if="!loadMap">loading map...</div>
-		<RobotsMap v-if="loadMap" :trafficLightsList="trafficLights.list" class="flex w-2/3 border-l border-gray-300 overflow-hidden" />
+		<RobotsMap v-else :trafficLightsList="trafficLights.list" class="flex w-2/3 border-l border-gray-300 overflow-hidden" />
 	</div>
 </template>
 
@@ -31,12 +31,6 @@
 		data() {
 			return {
 				trafficLights: {
-					data: {
-						total: 1,	// Zero value is not allowed, breaks the bar graph
-						functional: 0,
-						faulty: 0,
-						unresponsive: 0,
-					},
 					list: [],
 				},
 				loadMap: false, // Start with loading
@@ -58,7 +52,7 @@
 				const allTrafficlights = await window.dbAPI.getAll();
 
 				// Map the hardcoded `code` values to the fetched traffic lights
-				const hardcodedCodes = [0, 2, 13, 7, 17, 6, 1, 11]; // Retain these codes
+				const hardcodedCodes = [0, 2, 13, 7, 17, 6, 1, 11, 0, 2, 13, 7, 17, 6, 1, 11, 3, 12, 8, 9, 6, 1]; // Retain these codes
 				const trafficLightsWithCodes = allTrafficlights.map((trafficLight, index) => ({
 					id: trafficLight.id,
 					name: trafficLight.name,
@@ -69,13 +63,8 @@
 				// Update the trafficLights object
 				this.trafficLights.list = trafficLightsWithCodes;
 
-				// Update summary data
-				this.trafficLights.data.total = 8;
-				this.trafficLights.data.functional = 5; // Hardcoded for now
-				this.trafficLights.data.faulty = 2;     // Hardcoded for now
-				this.trafficLights.data.unresponsive = 1; // Hardcoded for now
-
-				this.loadMap = true; // Only show component when data is ready
+				// Only show component when data is ready
+				this.loadMap = true;
 			},
 		},
 		computed: {

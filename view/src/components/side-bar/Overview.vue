@@ -1,7 +1,7 @@
 <template>
 	<div class="flex flex-col h-full p-4 scrollable">
 		<h1 class="text-2xl font-semibold">Overview</h1>
-			<BarGraph :trafficLightsData="trafficLights.data" class="mt-4" />
+			<BarGraph :trafficLightsData="trafficLightsData" class="mt-4" />
 		<div class="flex flex-col mt-2 flex-grow">
 			<DropDown :options="options" v-model="filter" class="mt-5"/>
 			<RobotsList :trafficLightsList="filteredTrafficLights" class="mt-2 flex-grow" />
@@ -28,9 +28,16 @@
 			},
 		},
 		data() {
+			// TODO: Fetch the traffic lights data from the database
 			return {
-			filter: "Faulty",
-			options: ["All", "Faulty", "Unresponsive", "Functional"],
+				trafficLightsData: {
+					total: 1,	// Zero value is not allowed, breaks the bar graph
+					functional: 0,
+					faulty: 0,
+					unresponsive: 0,
+				},
+				filter: "Faulty",
+				options: ["All", "Faulty", "Unresponsive", "Functional"],
 			};
 		},
 		computed: {

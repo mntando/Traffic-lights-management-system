@@ -12,7 +12,7 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4" />
                     </svg>
                 </button>
-                <button @click="clicked" class="bg-white shadow p-2 border border-gray-300 rounded-full transition duration-100 ease-in-out transform hover:scale-110" aria-label="Full Screen">
+                <button @click="clicked" class="hidden bg-white shadow p-2 border border-gray-300 rounded-full transition duration-100 ease-in-out transform hover:scale-110" aria-label="Full Screen">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4h6M4 4v6M20 4h-6M20 4v6M4 20h6M4 20v-6M20 20h-6M20 20v-6" />
                     </svg>
@@ -49,7 +49,7 @@
         },
         computed: {
             trafficLightMarker() {
-                return `<div class="flex p-1 w-full h-full border border-gray-500 rounded-full transition duration-100 ease-in-out transform hover:scale-110">
+                return `<div class="flex p-1 w-full h-full border border-gray-500 rounded-full transition duration-100 ease-in-out transform hover:scale-125">
                         <div class="justify-center w-full h-full bg-gray-500 rounded-full"></div>
                     </div>`;
             },
@@ -82,7 +82,7 @@
                     attributionControl: false, 
                 })
                 // Add CartoDB Positron tiles
-                L.tileLayer("https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",).addTo(this.map);
+                L.tileLayer("https://{s}.basemaps.cartocdn.com/rastertiles/voyager_no_buildings/{z}/{x}/{y}{r}.png",).addTo(this.map);
             },
             addTrafficLights() {
                 // Custom traffic light marker

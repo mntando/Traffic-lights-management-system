@@ -3,7 +3,7 @@
 		<div class="title-bar flex h-full items-center">
 			<img src="@/assets/logo.png" id="logo" alt="Logo" class="h-full aspect-square p-2">
 			<div class="w-px h-5 bg-gray-300 mr-2"></div>
-			<button class="flex flex-row rounded-lg">
+			<button class="flex flex-row text-red-500 rounded-lg">
 				<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" class="my-auto" viewBox="0 0 16 16">
 					<path d="M15 8a6.97 6.97 0 0 0-1.71-4.584l-9.874 9.875A7 7 0 0 0 15 8M2.71 12.584l9.874-9.875a7 7 0 0 0-9.874 9.874ZM16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0"/>
 				</svg>

@@ -1,10 +1,7 @@
 <template>
 	<div class="flex flex-col flex-grow items-center">
-		<div class="flex items-center w-full px-4 mt-3">
-			<span class="ml-2 text-sm font-semibold">TL</span>
-		</div>
 		<div class="w-full px-2">
-			<div class="flex flex-col items-center w-full mt-3 border-t border-gray-300">
+			<div class="flex flex-col items-center w-full border-gray-300">
 				<button class="flex items-center w-full h-12 px-3 mt-2 rounded hover:bg-gray-200"
 					:class="{ 'bg-gray-200': activeButton === 'overview' }"
 					@click="btnClick('overview')">
