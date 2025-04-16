@@ -25,23 +25,18 @@ export function message(code) {
 }
 
 // Function to generate random traffic light updates
-export function generateTrafficLightUpdates(callback, interval = 1000) {
+export function getTrafficLightUpdates(callback, interval = 50000) {
     // Common traffic light states (will appear more frequently)
-    const commonCodes = [0, 1, 2, 3, 6, 7, 8, 9, 11, 12, 13, 17];
+    const commonCodes = [1];
     
     // Track IDs and their current codes
-    const trafficLights = [
-        { id: '1' },
-        { id: '2' },
-        { id: '3' },
-        { id: '4' }
-    ];
+    const trafficLights = Array.from({ length: 21 }, (_, i) => ({ id: (i + 1).toString() }));
     
     const intervalId = setInterval(() => {
       // Generate updates for all traffic lights
         trafficLights.forEach(light => {
-            // Determine if we should use a common code (70% chance) or random 0-31
-            const useCommonCode = Math.random() < 0.7;
+            // Determine if we should use a common code (80% chance) or random 0-31
+            const useCommonCode = Math.random() < 0.8;
             light.code = useCommonCode 
             ? commonCodes[Math.floor(Math.random() * commonCodes.length)]
             : Math.floor(Math.random() * 32);

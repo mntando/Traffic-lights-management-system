@@ -4,7 +4,7 @@
 			<BarGraph :trafficLightsData="trafficLightsData" class="mt-4" />
 		<div class="flex flex-col mt-2 flex-grow">
 			<DropDown :options="options" v-model="filter" class="mt-5"/>
-			<RobotsList :trafficLightsList="filteredTrafficLights" class="mt-2 flex-grow" />
+			<RobotsList :trafficLights="filteredTrafficLights" class="mt-2 flex-grow" />
 		</div>
 </div>
 </template>
@@ -23,19 +23,13 @@
 		},
 		props: {
 			trafficLights: {
-				type: Object,
+				type: Array,
 				required: true,
 			},
 		},
 		data() {
 			// TODO: Fetch the traffic lights data from the database
 			return {
-				trafficLightsData: {
-					total: 1,	// Zero value is not allowed, breaks the bar graph
-					functional: 0,
-					faulty: 0,
-					unresponsive: 0,
-				},
 				filter: "Faulty",
 				options: ["All", "Faulty", "Unresponsive", "Functional"],
 			};
@@ -43,9 +37,9 @@
 		computed: {
 			filteredTrafficLights() {
 				if (this.filter === "All") {
-					return this.trafficLights.list;
+					return this.trafficLights;
 				}
-				return this.trafficLights.list.filter((trafficLight) => {
+				return this.trafficLights.filter((trafficLight) => {
 					switch (this.filter) {
 						case "Faulty":
 							return (trafficLight.code & 0b00001) === 0 || (trafficLight.code & 0b1110) > 0; // Not operational or has LED faults
@@ -58,6 +52,37 @@
 					}
 				});
 			},
+			trafficLightsData() {
+				let functional = 0;
+				let faulty = 0;
+				let unresponsive = 0;
+				let total = this.trafficLights.length || 1; // Prevent zero
+
+				this.trafficLights.forEach(tl => {
+				const code = tl.code ?? 0;
+
+				const isOperational = code & 0b00001;
+				const isUnresponsive = code & 0b10000;
+				const hasLEDFault = code & 0b00010 || code & 0b00100 || code & 0b01000;
+
+				if (!isOperational) {
+					faulty++;
+				} else if (isUnresponsive) {
+					unresponsive++;
+				} else if (hasLEDFault) {
+					faulty++;
+				} else {
+					functional++;
+				}
+				});
+
+				return {
+				total,
+				functional,
+				faulty,
+				unresponsive,
+				};
+			}
 		},
 	};
 </script>

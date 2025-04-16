@@ -9,7 +9,7 @@
 				</svg>
 			</div>
 		</div>
-		<RobotsList v-if="filteredTrafficLights.length" :trafficLightsList="filteredTrafficLights" class="mt-2 flex-grow" />
+		<RobotsList v-if="filteredTrafficLights.length" :trafficLights="filteredTrafficLights" class="mt-2 flex-grow" />
 		<div v-else class="flex items-center justify-center flex-grow">
 			<p class="text-lg text-gray-500">No Traffic Lights found</p>
 		</div>
@@ -26,7 +26,7 @@
 		},
 		props: {
 			trafficLights: {
-				type: Object,
+				type: Array,
 				required: true,
 			},
 		},
@@ -37,7 +37,7 @@
 		},
 		computed: {
 			filteredTrafficLights() {
-				return this.trafficLights.list.filter(trafficLight =>
+				return this.trafficLights.filter(trafficLight =>
 					trafficLight.name.toLowerCase().includes(this.searchQuery.toLowerCase())
 				);
 			},

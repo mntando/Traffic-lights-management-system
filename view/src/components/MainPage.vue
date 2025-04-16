@@ -4,7 +4,7 @@
 			<component :is="activeComponent" :trafficLights="trafficLights"></component>
 		</div>
 		<div v-if="!loadMap">loading map...</div>
-		<RobotsMap v-else :trafficLightsList="trafficLights.list" class="flex w-2/3 border-l border-gray-300 overflow-hidden" />
+		<RobotsMap v-else :trafficLights="trafficLights" class="flex w-2/3 border-l border-gray-300 overflow-hidden" />
 	</div>
 </template>
 
@@ -16,6 +16,8 @@
 	import AlertsPage from './side-bar/Alerts.vue';
 	import MorePage from './side-bar/More.vue';
 	import AccountPage from './side-bar/Account.vue';
+
+	import { getTrafficLightUpdates } from "@/utils/utils.js";
 
 	export default {
 		name: 'MainPage',
@@ -30,10 +32,9 @@
 		},
 		data() {
 			return {
-				trafficLights: {
-					list: [],
-				},
+				trafficLights: [],
 				loadMap: false, // Start with loading
+				stopSimulation: null, // to store clearInterval
 			};
 		},
 		
@@ -48,24 +49,35 @@
 		},
 		methods: {
 			async fetchTrafficLights() {
-				// Fetch traffic lights data from the database
+				// Fetch traffic lights from the DB
 				const allTrafficlights = await window.dbAPI.getAll();
 
-				// Map the hardcoded `code` values to the fetched traffic lights
-				const hardcodedCodes = [0, 2, 13, 7, 17, 6, 1, 11, 0, 2, 13, 7, 17, 6, 1, 11, 3, 12, 8, 9, 6, 1]; // Retain these codes
-				const trafficLightsWithCodes = allTrafficlights.map((trafficLight, index) => ({
-					id: trafficLight.id,
-					name: trafficLight.name,
-					location: trafficLight.location,
-					code: hardcodedCodes[index + 1] || null, // Map codes; fallback to null if out of range
+				// Initialize with code = null
+				this.trafficLights = allTrafficlights.map(tl => ({
+					id: tl.id,
+					name: tl.name,
+					location: tl.location,
+					code: null,
 				}));
 
-				// Update the trafficLights object
-				this.trafficLights.list = trafficLightsWithCodes;
+				// Start simulation and update codes in real-time
+				this.stopSimulation = getTrafficLightUpdates((update) => {
+					const index = this.trafficLights.findIndex(tl => tl.id.toString() === update.id);
+					if (index !== -1) {
+						this.trafficLights[index].code = update.code;
+					}
+				});
 
-				// Only show component when data is ready
+				// Show the component after loading
 				this.loadMap = true;
 			},
+
+			beforeDestroy() {
+				// Stop simulation when component is destroyed
+				if (this.stopSimulation) {
+					this.stopSimulation();
+				}
+			}
 		},
 		computed: {
 			activeComponent() {

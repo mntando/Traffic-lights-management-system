@@ -12,7 +12,7 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4" />
                     </svg>
                 </button>
-                <button @click="clicked" class="hidden bg-white shadow p-2 border border-gray-300 rounded-full transition duration-100 ease-in-out transform hover:scale-110" aria-label="Full Screen">
+                <button @click="clicked" class="bg-white shadow p-2 border border-gray-300 rounded-full transition duration-100 ease-in-out transform hover:scale-110" aria-label="Full Screen">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4h6M4 4v6M20 4h-6M20 4v6M4 20h6M4 20v-6M20 20h-6M20 20v-6" />
                     </svg>
@@ -35,7 +35,7 @@
     export default {
         name: "RobotsMap",
         props: {
-            trafficLightsList: {
+            trafficLights: {
                 type: Array,
                 required: true,
             }
@@ -53,8 +53,8 @@
                         <div class="justify-center w-full h-full bg-gray-500 rounded-full"></div>
                     </div>`;
             },
-            trafficLights() {
-                return this.trafficLightsList.map((trafficLight) => {
+            trafficLightMarkers() {
+                return this.trafficLights.map((trafficLight) => {
                     const location = JSON.parse(trafficLight.location);
                     return {
                         lat: location.lat,
@@ -92,10 +92,9 @@
                     iconSize: [35, 35],
                 });
 
-
-                this.trafficLights.forEach((light) => {
-					const marker = L.marker([light.lat, light.lng], { icon: trafficLightIcon })
-					.bindPopup(light.label)
+                this.trafficLightMarkers.forEach((trafficLight) => {
+					const marker = L.marker([trafficLight.lat, trafficLight.lng], { icon: trafficLightIcon })
+					.bindPopup(trafficLight.label)
                     .addTo(this.map);
                     this.markers.push(marker);
                 });
