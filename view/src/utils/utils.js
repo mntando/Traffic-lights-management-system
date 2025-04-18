@@ -25,7 +25,7 @@ export function message(code) {
 }
 
 // Function to generate random traffic light updates
-export function getTrafficLightUpdates(callback, interval = 50000) {
+export function getTrafficLightUpdates(callback, interval = 30000) { // Put 30 seconds
     // Common traffic light states (will appear more frequently)
     const commonCodes = [1];
     
@@ -33,20 +33,25 @@ export function getTrafficLightUpdates(callback, interval = 50000) {
     const trafficLights = Array.from({ length: 21 }, (_, i) => ({ id: (i + 1).toString() }));
     
     const intervalId = setInterval(() => {
-      // Generate updates for all traffic lights
+        // Generate updates for all traffic lights
         trafficLights.forEach(light => {
             // Determine if we should use a common code (80% chance) or random 0-31
             const useCommonCode = Math.random() < 0.8;
-            light.code = useCommonCode 
-            ? commonCodes[Math.floor(Math.random() * commonCodes.length)]
-            : Math.floor(Math.random() * 32);
-            
+            let code = useCommonCode 
+                ? commonCodes[Math.floor(Math.random() * commonCodes.length)]
+                : Math.floor(Math.random() * 32);
+
+            // If the code includes 'Unresponsive' (bit 4), strip all other bits
+            if (code & 0b10000) {
+                code = 0b10001;
+            }
+
             // Create the JSON output
             const update = {
-            id: light.id,
-            code: light.code
+                id: light.id,
+                code: code
             };
-            
+
             callback(update);
         });
 
@@ -55,4 +60,3 @@ export function getTrafficLightUpdates(callback, interval = 50000) {
     // Return function to stop the simulation
     return () => clearInterval(intervalId);
 }
-

@@ -42,7 +42,7 @@
 				return this.trafficLights.filter((trafficLight) => {
 					switch (this.filter) {
 						case "Faulty":
-							return (trafficLight.code & 0b00001) === 0 || (trafficLight.code & 0b1110) > 0; // Not operational or has LED faults
+							return (trafficLight.code & 0b00001) === 0 || (trafficLight.code & 0b1110) > 0 || (trafficLight.code & 0b10000) > 0; // Not operational or has LED faults or unresponsive
 						case "Unresponsive":
 							return (trafficLight.code & 0b10000) > 0; // Unresponsive
 						case "Functional":
@@ -59,21 +59,22 @@
 				let total = this.trafficLights.length || 1; // Prevent zero
 
 				this.trafficLights.forEach(tl => {
-				const code = tl.code ?? 0;
+					const code = tl.code ?? 0;
 
-				const isOperational = code & 0b00001;
-				const isUnresponsive = code & 0b10000;
-				const hasLEDFault = code & 0b00010 || code & 0b00100 || code & 0b01000;
+					const isOperational = code & 0b00001;
+					const isUnresponsive = (code & 0b10000) > 0;
+					const hasLEDFault = (code & 0b00010) > 0 || (code & 0b00100) > 0 || (code & 0b01000) > 0;
 
-				if (!isOperational) {
-					faulty++;
-				} else if (isUnresponsive) {
-					unresponsive++;
-				} else if (hasLEDFault) {
-					faulty++;
-				} else {
-					functional++;
-				}
+					if (!isOperational) {
+						faulty++;
+					} else if (isUnresponsive) {
+						faulty++;
+						unresponsive++;
+					} else if (hasLEDFault) {
+						faulty++;
+					} else {
+						functional++;
+					}
 				});
 
 				return {

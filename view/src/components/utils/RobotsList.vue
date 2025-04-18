@@ -6,7 +6,7 @@
 				<div class="font-semibold text-lg">
 					{{ trafficLight.name }}
 				</div>
-				<div class="text-sm" :class="message(trafficLight.code).msg.startsWith('Faults:') ? 'text-red-500' : 'text-green-500'">
+				<div class="text-sm" :class="`text-${message(trafficLight.code).color}-500`">
 					{{ message(trafficLight.code).msg }}
 				</div>
 			</div>

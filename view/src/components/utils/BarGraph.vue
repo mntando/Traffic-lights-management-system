@@ -95,9 +95,9 @@
 			},
 		},
 	};
-	</script>
+</script>
 	
-	<style>
+<style>
 	.bar-graph {
 		width: 100%;
 		overflow: hidden;
@@ -128,5 +128,4 @@
 	.percentage.fade-in {
 		opacity: 1; /* Fully visible */
 	}
-	</style>
-	
+</style>

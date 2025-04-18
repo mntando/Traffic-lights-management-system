@@ -54,14 +54,14 @@
                     </div>`;
             },
             trafficLightMarkers() {
-                return this.trafficLights.map((trafficLight) => {
-                    const location = JSON.parse(trafficLight.location);
+                return this.trafficLights.map((light) => {
+                    const location = JSON.parse(light.location);
                     return {
                         lat: location.lat,
                         lng: location.lng,
-                        label: `<span class='text-lg'>${trafficLight.name}</span>
+                        label: `<span class='text-lg'>${light.name}</span>
                             <br>
-                            <span class="text-${message(trafficLight.code).color}-500">${message(trafficLight.code).msg}</span>
+                            <span class="text-${message(light.code).color}-500">${message(light.code).msg}</span>
                             <br>
                             <a class='hover:underline'>more</a>`
                     }
@@ -115,7 +115,7 @@
                 }
             },
             clicked() {
-                console.log("mv");
+                console.log("clicked");
             },
             // Imported methods
             message,

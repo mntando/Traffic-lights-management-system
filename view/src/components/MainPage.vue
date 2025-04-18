@@ -37,7 +37,6 @@
 				stopSimulation: null, // to store clearInterval
 			};
 		},
-		
 		props: {
 			activeAction: {
 				type: String,
