@@ -3,13 +3,19 @@
 		<div class="border border-gray-300 rounded-lg">
 			<div class="bar-graph">
 				<div class="bar bg-green-500" :style="{ width: bar1Width }">
-					<span class="percentage" :class="{ 'fade-in': showPercentages }">{{ targetWidths.functional.toFixed(1) }}</span>
+					<span class="percentage" :class="{ 'fade-in': showPercentages }">
+						{{ targetWidths.functional.toFixed(1) }}%
+					</span>
 				</div>
 				<div class="bar bg-red-500" :style="{ width: bar2Width }">
-					<span class="percentage" :class="{ 'fade-in': showPercentages }">{{ targetWidths.faulty.toFixed(1) }}</span>
+					<span class="percentage" :class="{ 'fade-in': showPercentages }">
+						{{ targetWidths.faulty.toFixed(1) }}%
+					</span>
 				</div>
 				<div class="bar bg-gray-500" :style="{ width: bar3Width }">
-					<span class="percentage" :class="{ 'fade-in': showPercentages }">{{ targetWidths.unresponsive.toFixed(1) }}</span>
+					<span class="percentage" :class="{ 'fade-in': showPercentages }">
+						{{ targetWidths.unresponsive.toFixed(1) }}%
+					</span>
 				</div>
 			</div>
 			<div class="flex justify-between text-xs font-medium p-3">
@@ -30,7 +36,9 @@
 				</div>
 			</div>
 		</div>
-		<p class="text-xs font-medium mt-2">Total Traffic Lights: {{ trafficLightsData.total }}</p>
+		<p class="text-xs font-medium mt-2">
+			Total Traffic Lights: {{ trafficLightsData.total }}
+		</p>
 	</div>
 </template>
 
@@ -39,74 +47,72 @@
 		name: "BarGraph",
 		props: {
 			trafficLightsData: {
-					type: Object,
-					required: true,
-			},
+				type: Object,
+				required: true,
+				default: () => ({
+					functional: 0,
+					faulty: 0,
+					unresponsive: 0,
+					total: 0
+				}),
+				validator(data) {
+					return ['functional','faulty','unresponsive','total']
+						.every(k => typeof data[k] === 'number');
+				}
+			}
 		},
 		data() {
 			return {
-				bar1Width: "0%", // Initial width for bar 1
-				bar2Width: "0%", // Initial width for bar 2
-				bar3Width: "0%", // Initial width for bar 3
-				showPercentages: false, // State to control percentage visibility
+				bar1Width: "0%",
+				bar2Width: "0%",
+				bar3Width: "0%",
+				showPercentages: false
 			};
-		},
-		watch: {
-			targetWidths: {
-				handler() {
-					this.animateBars();
-				},
-				deep: true,
-			},
-		},
-		mounted() {
-			this.animateBars();
-		},
-		methods: {
-			animateBars() {
-				this.animateBar(1, this.targetWidths.functional);
-				this.animateBar(2, this.targetWidths.faulty);
-				this.animateBar(3, this.targetWidths.unresponsive);
-
-				// Show percentages after all animations
-				setTimeout(() => {
-					this.showPercentages = true;
-				}, 800); // Delay matches the animation duration
-			},
-			animateBar(barNumber, targetWidth) {
-				let width = 0;
-				const interval = setInterval(() => {
-					if (width >= targetWidth) {
-						clearInterval(interval); // Stop the animation at the target width
-					} else {
-						width++;
-						this[`bar${barNumber}Width`] = `${width}%`; // Update the width of the specific bar
-					}
-				}, 10); // Adjust speed
-			},
 		},
 		computed: {
 			targetWidths() {
+				const { functional, faulty, unresponsive, total } = this.trafficLightsData;
+				const safeTotal = total || 1; // avoid division by zero
 				return {
-					functional: this.trafficLightsData.functional / this.trafficLightsData.total * 100,
-					faulty: this.trafficLightsData.faulty / this.trafficLightsData.total * 100,
-					unresponsive: this.trafficLightsData.unresponsive / this.trafficLightsData.total * 100,
+					functional:  (functional   / safeTotal) * 100,
+					faulty:      (faulty       / safeTotal) * 100,
+					unresponsive:(unresponsive / safeTotal) * 100
 				};
-			},
+			}
 		},
+		mounted() {
+			// Initialize bars at their “starting” values
+			this.bar1Width = `${this.targetWidths.functional}%`;
+			this.bar2Width = `${this.targetWidths.faulty}%`;
+			this.bar3Width = `${this.targetWidths.unresponsive}%`;
+			// reveal percentages after first render
+			setTimeout(() => this.showPercentages = true, 1000);
+		},
+		watch: {
+			trafficLightsData: {
+				deep: true,
+				handler() {
+					// hide percentages, then animate to new target widths
+					this.showPercentages = false;
+					this.bar1Width = `${this.targetWidths.functional}%`;
+					this.bar2Width = `${this.targetWidths.faulty}%`;
+					this.bar3Width = `${this.targetWidths.unresponsive}%`;
+					setTimeout(() => this.showPercentages = true, 1000);
+				}
+			}
+		}
 	};
 </script>
-	
-<style>
+
+<style scoped>
 	.bar-graph {
 		width: 100%;
-		overflow: hidden;
 		display: flex;
 		flex-direction: column;
 		gap: 10px;
 		padding: 10px;
 	}
-	
+
 	.bar {
 		height: 55px;
 		display: flex;
@@ -118,14 +124,16 @@
 		font-weight: bold;
 		padding-right: 5px;
 		overflow: hidden;
+		/* smooth transition from previous width to new width */
+		transition: width 1s ease-out;
 	}
-	
+
 	.percentage {
-		opacity: 0; /* Initially hidden */
-		transition: opacity 1s ease; /* Smooth fade-in effect */
+		opacity: 0;
+		transition: opacity 1s ease;
 	}
-	
+
 	.percentage.fade-in {
-		opacity: 1; /* Fully visible */
+		opacity: 1;
 	}
 </style>

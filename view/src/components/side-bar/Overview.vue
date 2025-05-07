@@ -68,7 +68,6 @@
 					if (!isOperational) {
 						faulty++;
 					} else if (isUnresponsive) {
-						faulty++;
 						unresponsive++;
 					} else if (hasLEDFault) {
 						faulty++;

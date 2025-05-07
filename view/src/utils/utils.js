@@ -25,7 +25,7 @@ export function message(code) {
 }
 
 // Function to generate random traffic light updates
-export function getTrafficLightUpdates(callback, interval = 25000) { // TODO: time 30 seconds
+export function simulateTrafficLightUpdates(callback, interval = 30000) { // TODO: time 30 seconds
     // Common traffic light states (will appear more frequently)
     const commonCodes = [1];
     

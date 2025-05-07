@@ -17,7 +17,7 @@
 	import MorePage from './side-bar/More.vue';
 	import AccountPage from './side-bar/Account.vue';
 
-	import { getTrafficLightUpdates } from "@/utils/utils.js";
+	import { simulateTrafficLightUpdates } from "@/utils/utils.js";
 
 	export default {
 		name: 'MainPage',
@@ -60,7 +60,7 @@
 				}));
 
 				// Start simulation and update codes in real-time
-				this.stopSimulation = getTrafficLightUpdates((update) => {
+				this.stopSimulation = simulateTrafficLightUpdates((update) => {
 					const index = this.trafficLights.findIndex(tl => tl.id.toString() === update.id);
 					if (index !== -1) {
 						this.trafficLights[index].code = update.code;

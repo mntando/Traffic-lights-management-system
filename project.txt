@@ -53,7 +53,6 @@ Map: show map, add markers for robots, show when hoved, click for more (open sea
 // Ideas:
 - Get data from MainPage, since it has to render different components (Overview and RobotsMap)
 - MapDiv to emit to MainPage onclick on robots (this emit to change components on MainPage#side-bar)
-- Add control svg to RobotsList <li> tags (onclick to open control sidebar), onclick on <li> to show robot on map
 - SideBar - control a single robot at a time, click on robot on map show label with the control svg
 - Show severity levels (e.g., critical faults in red, minor ones in orange) - Provide expand/collapse functionality for detailed fault descriptions.
 
@@ -68,7 +67,6 @@ Map: show map, add markers for robots, show when hoved, click for more (open sea
             run `npm audit fix` to fix them, or `npm audit` for details
 
 // Tommorow:
-- finish the map -> move the trafficLightIcon to the trafficLights code/data logic so as to be able to change icon color dynamically (bind!)
-- do the traffic lights database and implementation, figure out how all the parameters will be passed to components,
 - do the control section, make it a sidebar that opens when a robot is clicked on the map
+- add these colors: text-green-500 border border-green-500 border-red-500 border-gray-500
 
