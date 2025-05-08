@@ -6,7 +6,7 @@
 			<DropDown :options="options" v-model="filter" class="mt-5"/>
 			<RobotsList :trafficLights="filteredTrafficLights" @focus-request="forwardFocus" class="mt-2 flex-grow" />
 		</div>
-</div>
+	</div>
 </template>
 
 <script>

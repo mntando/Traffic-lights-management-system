@@ -13,14 +13,26 @@
 					</svg>
 				</button>
 				<button @click="toggleFullScreen" class="bg-white shadow p-2 border border-gray-300 rounded-full transition duration-100 ease-in-out transform hover:scale-110" aria-label="Full Screen">
-					<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+					<svg v-if="!isFullScreen" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4h6M4 4v6M20 4h-6M20 4v6M4 20h6M4 20v-6M20 20h-6M20 20v-6" />
+					</svg>
+					<svg v-else xmlns="http://www.w3.org/2000/svg" fill="none" class="h-6 w-6" viewBox="0 0 24 24">
+						<g fill="currentColor">
+							<path d="m3 9.25c0-.41421.33579-.75.75-.75h4.75v-4.75c0-.41421.33579-.75.75-.75s.75.33579.75.75v5.25c0 .55229-.44772 1-1 1h-5.25c-.41421 0-.75-.33579-.75-.75z"/>
+							<path d="m20.25 8.5c.4142 0 .75.33579.75.75s-.3358.75-.75.75h-5.25c-.5523 0-1-.44771-1-1v-5.25c0-.41421.3358-.75.75-.75s.75.33579.75.75v4.75z"/>
+							<path d="m20.25 15.5c.4142 0 .75-.3358.75-.75s-.3358-.75-.75-.75h-5.25c-.5523 0-1 .4477-1 1v5.25c0 .4142.3358.75.75.75s.75-.3358.75-.75v-4.75z"/>
+							<path d="m3.75 15.5c-.41421 0-.75-.3358-.75-.75s.33579-.75.75-.75h5.25c.55228 0 1 .4477 1 1v5.25c0 .4142-.33579.75-.75.75s-.75-.3358-.75-.75v-4.75z"/>
+						</g>
 					</svg>
 				</button>
 				<button @click="goToTown" class="bg-white shadow p-2 border border-gray-300 rounded-full transition duration-100 ease-in-out transform hover:scale-110 text-blue-500" aria-label="Go to Location">
-					<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+					<svg v-if="onTown" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 						<path d="M 12 3	A 9 9 0 1 1 12 21 A 9 9 0 1 1 12 3 M 12 2 L 12 -8 M 12 22 L 12 32 M 2 12 L -8 12 M 22 12 L 32 12 M 12 9	A 3 3 0 1 1 12 15 A 3 3 0 1 1 12 9" fill="none" stroke="currentColor" stroke-width="2"/>
 						<circle cx="12" cy="12" r="3" fill="currentColor" />
+					</svg>
+					<svg v-else xmlns="http://www.w3.org/2000/svg" class="text-gray-600" viewBox="0 0 48 48">
+						<path d="m0 0h48v48h-48z" fill="none"/>
+						<path fill="currentColor" d="m44 22h-4.1a16.1 16.1 0 0 0 -13.9-13.9v-4.1a2 2 0 0 0 -4 0v4a16.1 16.1 0 0 0 -13.9 14h-4.1a2 2 0 0 0 0 4h4.1a16.1 16.1 0 0 0 13.9 13.9v4a2 2 0 0 0 4 0v-3.9a16.1 16.1 0 0 0 13.9-14h4.1a2 2 0 0 0 0-4zm-20 14a12 12 0 1 1 12-12 12 12 0 0 1 -12 12z"/>
 					</svg>
 				</button>
 			</div>
@@ -45,6 +57,9 @@
 				map: null,
 				town: { lat: -20.154, lng: 28.585 },
 				markers: {}, // key: id or name, value: marker
+
+				onTown: true,
+				isFullScreen: false,
 			};
 		},
 		watch: {
@@ -60,10 +75,20 @@
 			this.addTrafficLights();
 
 			// Set up event listeners for map interactions
+			// Fullscreen change event
 			document.addEventListener('fullscreenchange', () => {
 				if (this.map) {
 					this.map.invalidateSize();
 				}
+			});
+
+			// Map click event
+			this.map.on('moveend', () => {
+				const center = this.map.getCenter();
+				const zoom = this.map.getZoom();
+				const townLatLng = L.latLng(this.town.lat, this.town.lng);
+
+				this.onTown = zoom === 16 && center.distanceTo(townLatLng) < 10; // 10 meters threshold
 			});
 		},
 		methods: {
@@ -131,7 +156,7 @@
 			},
 			updateTrafficLights() {
 				if (!this.map) return;
-				this.addTrafficLights(); // smarter version, doesn’t nuke everything
+				this.addTrafficLights(); // Re-add traffic lights to update their positions and colors
 			},
 			zoomIn() {
 				if (this.map) {
@@ -147,14 +172,21 @@
 				if (this.map) {
 					if (!document.fullscreenElement) {
 						this.map.getContainer().requestFullscreen();
+						setTimeout(() => {
+							this.isFullScreen = true;
+						}, 100);
 					} else {
 						document.exitFullscreen();
+						setTimeout(() => {
+							this.isFullScreen = false;
+						}, 100);
 					}
 				}
 			},
 			goToTown() {
 				if (this.map) {
 					this.map.flyTo(this.town, 16);
+					this.onTown = true;
 				}
 			},
 			focusOn(id) {

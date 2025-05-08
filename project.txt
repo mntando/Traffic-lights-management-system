@@ -45,11 +45,6 @@ Map: show map, add markers for robots, show when hoved, click for more (open sea
 - To buid the Vue frontend, run `npm run build` in the `view` directory when ready to package the Electron app
 - Uninstall leaflet-mbtiles
 
-// Tasks:
-- Complete overview, search, (almost done)
-- Do transitions for contents page (someday)
-- Connection button
-
 // Ideas:
 - Get data from MainPage, since it has to render different components (Overview and RobotsMap)
 - MapDiv to emit to MainPage onclick on robots (this emit to change components on MainPage#side-bar)
@@ -66,7 +61,10 @@ Map: show map, add markers for robots, show when hoved, click for more (open sea
 - Error: npm audit (in the view directory)
             run `npm audit fix` to fix them, or `npm audit` for details
 
-// Tommorow:
-- do the control section, make it a sidebar that opens when a robot is clicked on the map
+// Tasks:
+- Do transitions for contents page (someday)
+- Connection button
 - add these colors: text-green-500 
+- do the control section, make it an overlay that opens when a robot is clicked on the map or somewhere else, use (Pinia)
+- change from emits to Pinia for interactivity between components (MainPage, MapDiv, SideBar)
 

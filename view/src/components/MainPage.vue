@@ -21,7 +21,6 @@
 
 	import { simulateTrafficLightUpdates } from "@/utils/utils.js";
 
-
 	export default {
 		name: 'MainPage',
 		components: {
@@ -37,7 +36,7 @@
 			return {
 				trafficLights: [],
 				loadMap: false, // Start with loading
-				stopSimulation: null, // to store clearInterval
+				stopSimulation: null, // To store clearInterval
 			};
 		},
 		props: {
