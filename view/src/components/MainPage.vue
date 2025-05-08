@@ -1,10 +1,10 @@
 <template>
 	<div class="flex w-full flex-grow bg-white border-t border-l border-gray-300 rounded-tl-xl">
 		<div id="side-bar" class="w-1/3 text-left">
-			<component :is="activeComponent" :trafficLights="trafficLights"></component>
+			<component :is="activeComponent" :trafficLights="trafficLights" @focus-request="focusOn"></component>
 		</div>
 		<div v-if="!loadMap">loading map...</div>
-		<RobotsMap v-else :trafficLights="trafficLights" class="flex w-2/3 border-l border-gray-300 overflow-hidden" />
+		<RobotsMap ref="mapRef" v-else :trafficLights="trafficLights" class="flex w-2/3 border-l border-gray-300 overflow-hidden" />
 	</div>
 </template>
 
@@ -17,7 +17,10 @@
 	import MorePage from './side-bar/More.vue';
 	import AccountPage from './side-bar/Account.vue';
 
+	import { ref } from 'vue';
+
 	import { simulateTrafficLightUpdates } from "@/utils/utils.js";
+
 
 	export default {
 		name: 'MainPage',
@@ -65,7 +68,7 @@
 					if (index !== -1) {
 						this.trafficLights[index].code = update.code;
 					}
-				});
+				}, 30000, this.trafficLights.length); // TODO: time 30 seconds
 
 				// Show the component after loading
 				this.loadMap = true;
@@ -83,6 +86,18 @@
 				const componentName = this.activeAction.charAt(0).toUpperCase() + this.activeAction.slice(1) + 'Page';
 				return this.$options.components[componentName];
 			},
+		},
+		setup() {
+			const mapRef = ref(null);
+
+			const focusOn = (id) => {
+				mapRef.value?.focusOn(id);
+			};
+
+			return {
+				mapRef,
+				focusOn,
+			};
 		},
 	};
 </script>

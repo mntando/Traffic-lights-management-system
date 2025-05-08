@@ -2,22 +2,22 @@
 	<div class="map-container">
 		<div id="map" class="relative w-full h-full">
 			<div class="absolute top-4 left-4 flex flex-col space-y-3">
-				<button @click="zoomIn" class="bg-white shadow p-2 border border-gray-300 rounded-full transition duration-100 ease-in-out transform hover:scale-125" aria-label="Zoom In">
+				<button @click="zoomIn" class="bg-white shadow p-2 border border-gray-300 rounded-full transition duration-100 ease-in-out transform hover:scale-110" aria-label="Zoom In">
 					<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
 					</svg>
 				</button>
-				<button @click="zoomOut" class="bg-white shadow p-2 border border-gray-300 rounded-full transition duration-100 ease-in-out transform hover:scale-125" aria-label="Zoom Out">
+				<button @click="zoomOut" class="bg-white shadow p-2 border border-gray-300 rounded-full transition duration-100 ease-in-out transform hover:scale-110" aria-label="Zoom Out">
 					<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4" />
 					</svg>
 				</button>
-				<button @click="clicked" class="bg-white shadow p-2 border border-gray-300 rounded-full transition duration-100 ease-in-out transform hover:scale-125" aria-label="Full Screen">
+				<button @click="toggleFullScreen" class="bg-white shadow p-2 border border-gray-300 rounded-full transition duration-100 ease-in-out transform hover:scale-110" aria-label="Full Screen">
 					<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4h6M4 4v6M20 4h-6M20 4v6M4 20h6M4 20v-6M20 20h-6M20 20v-6" />
 					</svg>
 				</button>
-				<button @click="goToTown" class="bg-white shadow p-2 border border-gray-300 rounded-full transition duration-100 ease-in-out transform hover:scale-125 text-blue-500" aria-label="Go to Location">
+				<button @click="goToTown" class="bg-white shadow p-2 border border-gray-300 rounded-full transition duration-100 ease-in-out transform hover:scale-110 text-blue-500" aria-label="Go to Location">
 					<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 						<path d="M 12 3	A 9 9 0 1 1 12 21 A 9 9 0 1 1 12 3 M 12 2 L 12 -8 M 12 22 L 12 32 M 2 12 L -8 12 M 22 12 L 32 12 M 12 9	A 3 3 0 1 1 12 15 A 3 3 0 1 1 12 9" fill="none" stroke="currentColor" stroke-width="2"/>
 						<circle cx="12" cy="12" r="3" fill="currentColor" />
@@ -58,20 +58,27 @@
 		mounted() {
 			this.initMap();
 			this.addTrafficLights();
+
+			// Set up event listeners for map interactions
+			document.addEventListener('fullscreenchange', () => {
+				if (this.map) {
+					this.map.invalidateSize();
+				}
+			});
 		},
 		methods: {
 			initMap() {
 				this.map = L.map("map", {
 					center: [this.town.lat, this.town.lng],
-					zoom: 17,
+					zoom: 16,
 					zoomControl: false,
 					attributionControl: false,
 				});
 				L.tileLayer("https://{s}.basemaps.cartocdn.com/rastertiles/voyager_no_buildings/{z}/{x}/{y}{r}.png").addTo(this.map);
 			},
-			getTrafficLightMarkerHtml(color) {
-				return `<div class="flex p-1 w-full h-full border border-${color}-500 rounded-full transition duration-100 ease-in-out transform hover:scale-125">
-							<div class="justify-center w-full h-full bg-${color}-500 rounded-full"></div>
+			getTrafficLightMarkerHtml(id, color) {
+				return `<div class="flex w-full h-full border-2 border-white rounded-full transition duration-100 ease-in-out transform hover:scale-125">
+							<div class="flex items-center justify-center text-white w-full h-full bg-${color}-500 rounded-full">${id}</div>
 						</div>`;
 			},
 			addTrafficLights() {
@@ -79,7 +86,7 @@
 					const id = light.id || light.name;
 					const location = JSON.parse(light.location);
 					const color = message(light.code).color;
-					const html = this.getTrafficLightMarkerHtml(color);
+					const html = this.getTrafficLightMarkerHtml(id, color);
 					const label = `<span class='text-lg'>${light.name}</span><br>
 						<span class="text-${color}-500">${message(light.code).msg}</span><br>
 						<a class='hover:underline'>more</a>`;
@@ -100,7 +107,7 @@
 						const newIcon = L.divIcon({
 							className: "custom-icon",
 							html,
-							iconSize: [35, 35],
+							iconSize: [30, 30],
 						});
 						existing.setIcon(newIcon);
 					} else {
@@ -109,7 +116,7 @@
 							icon: L.divIcon({
 								className: "custom-icon",
 								html,
-								iconSize: [35, 35],
+								iconSize: [30, 30],
 							}),
 						}).bindPopup(label).addTo(this.map);
 						this.markers[id] = marker;
@@ -136,13 +143,31 @@
 					this.map.zoomOut();
 				}
 			},
+			toggleFullScreen() {
+				if (this.map) {
+					if (!document.fullscreenElement) {
+						this.map.getContainer().requestFullscreen();
+					} else {
+						document.exitFullscreen();
+					}
+				}
+			},
 			goToTown() {
 				if (this.map) {
-					this.map.setView(this.town, 17);
+					this.map.flyTo(this.town, 16);
+				}
+			},
+			focusOn(id) {
+				const marker = this.markers[id];
+				if (marker) {
+					this.map.flyTo(marker.getLatLng(), 17);
+					this.map.once('moveend', () => {
+						marker.openPopup();
+					});
 				}
 			},
 			clicked() {
-				console.log("clicked");
+				console.log("TODO:");
 			},
 			message,
 		},

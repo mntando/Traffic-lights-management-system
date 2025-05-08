@@ -9,7 +9,7 @@
 				</svg>
 			</div>
 		</div>
-		<RobotsList v-if="filteredTrafficLights.length" :trafficLights="filteredTrafficLights" class="mt-2 flex-grow" />
+		<RobotsList v-if="filteredTrafficLights.length" :trafficLights="filteredTrafficLights" @focus-request="forwardFocus" class="mt-2 flex-grow" />
 		<div v-else class="flex items-center justify-center flex-grow">
 			<p class="text-lg text-gray-500">No Traffic Lights found</p>
 		</div>
@@ -35,17 +35,20 @@
 				searchQuery: '',
 			};
 		},
+		methods: {
+			forwardFocus(id) {
+				this.$emit('focus-request', id); // Pass it up to parent
+			},
+			onSearch() {
+				// TODO: method can be used for additional side effects if needed
+				// console.log('Searching for:', this.searchQuery);
+			},
+		},
 		computed: {
 			filteredTrafficLights() {
 				return this.trafficLights.filter(trafficLight =>
 					trafficLight.name.toLowerCase().includes(this.searchQuery.toLowerCase())
 				);
-			},
-		},
-		methods: {
-			onSearch() {
-				// TODO: method can be used for additional side effects if needed
-				// console.log('Searching for:', this.searchQuery);
 			},
 		},
 		mounted() {

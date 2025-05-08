@@ -4,7 +4,7 @@
 			<BarGraph :trafficLightsData="trafficLightsData" class="mt-4" />
 		<div class="flex flex-col mt-2 flex-grow">
 			<DropDown :options="options" v-model="filter" class="mt-5"/>
-			<RobotsList :trafficLights="filteredTrafficLights" class="mt-2 flex-grow" />
+			<RobotsList :trafficLights="filteredTrafficLights" @focus-request="forwardFocus" class="mt-2 flex-grow" />
 		</div>
 </div>
 </template>
@@ -33,6 +33,11 @@
 				filter: "Faulty",
 				options: ["All", "Faulty", "Unresponsive", "Functional"],
 			};
+		},
+		methods: {
+			forwardFocus(id) {
+				this.$emit('focus-request', id); // Pass it up to parent
+			}
 		},
 		computed: {
 			filteredTrafficLights() {

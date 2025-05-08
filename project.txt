@@ -13,7 +13,7 @@ project-root/
 // App
 - npm run dev (in the app directory) // to run the Electron app
 - npx tailwindcss -i ./src/assets/css/styles.css -o ./src/assets/css/tailwind.css --watch (in the view directory) // to run tailwindcss
-- npx electron sqlite.js // to run the Electron app with SQLite
+- npx electron sqlite.js // to run the Electron app with SQLite (for sqlite.js and seeder.js)
 
 // Notes
 - The Electron app will be the main application that runs on the user's computer
@@ -68,5 +68,5 @@ Map: show map, add markers for robots, show when hoved, click for more (open sea
 
 // Tommorow:
 - do the control section, make it a sidebar that opens when a robot is clicked on the map
-- add these colors: text-green-500 border border-green-500 border-red-500 border-gray-500
+- add these colors: text-green-500 
 

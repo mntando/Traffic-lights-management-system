@@ -25,12 +25,12 @@ export function message(code) {
 }
 
 // Function to generate random traffic light updates
-export function simulateTrafficLightUpdates(callback, interval = 30000) { // TODO: time 30 seconds
+export function simulateTrafficLightUpdates(callback, interval, number) {
     // Common traffic light states (will appear more frequently)
     const commonCodes = [1];
     
     // Track IDs and their current codes
-    const trafficLights = Array.from({ length: 21 }, (_, i) => ({ id: (i + 1).toString() }));
+    const trafficLights = Array.from({ length: number }, (_, i) => ({ id: (i + 1).toString() }));
     
     const intervalId = setInterval(() => {
         // Generate updates for all traffic lights
@@ -60,3 +60,4 @@ export function simulateTrafficLightUpdates(callback, interval = 30000) { // TOD
     // Return function to stop the simulation
     return () => clearInterval(intervalId);
 }
+ 
