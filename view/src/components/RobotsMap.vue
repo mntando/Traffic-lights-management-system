@@ -44,6 +44,8 @@
 	import L from "leaflet";
 	import { message } from "@/utils/utils.js";
 
+	import { useRobotMapStore } from "@/stores/robotMap";
+
 	export default {
 		name: "RobotsMap",
 		props: {
@@ -69,6 +71,9 @@
 					this.updateTrafficLights();
 				},
 			},
+
+			// Watch for changes in focusTargetId from the store
+
 		},
 		mounted() {
 			this.initMap();
@@ -82,6 +87,21 @@
 				}
 			});
 
+			// Focus on a specific marker when focusTargetId changes
+			this.mapStore = useRobotMapStore();
+			this.unsub = this.mapStore.$subscribe((mutation, state) => {
+				if (
+					mutation.storeId === 'robotMap' &&
+					mutation.events.key === 'focusTargetId'
+				) {
+					const id = state.focusTargetId;
+					if (id) {
+						this.focusOn(id);
+						this.mapStore.clearFocus();
+					}
+				}
+			});
+
 			// Map click event
 			this.map.on('moveend', () => {
 				const center = this.map.getCenter();
@@ -89,6 +109,7 @@
 				const townLatLng = L.latLng(this.town.lat, this.town.lng);
 
 				this.onTown = zoom === 16 && center.distanceTo(townLatLng) < 10; // 10 meters threshold
+				this.onTown = center.distanceTo(townLatLng) < 10; // Set threshold )
 			});
 		},
 		methods: {
@@ -198,9 +219,6 @@
 					});
 				}
 			},
-			clicked() {
-				console.log("TODO:");
-			},
 			message,
 		},
 		beforeUnmount() {
@@ -208,6 +226,9 @@
 				this.map.off();
 				this.map.remove();
 			}
+
+			// Remove event listeners
+			this.unsub(); 
 		},
 	};
 </script>

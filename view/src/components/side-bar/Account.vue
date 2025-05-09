@@ -1,27 +1,14 @@
 <template>
-    <div class="flex flex-col h-full p-4 scrollable">
-        <h1 class="text-2xl font-semibold">Traffic Lights</h1>
-        <ul>
-            <li v-for="light in trafficLights" :key="light.id">{{ light.name }} - {{ light.location }}</li>
-        </ul>
+    <div class="flex flex-col h-full p-4 space-y-4 scrollable">
+        <button class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600">
+            Test
+        </button>
     </div>
 </template>
 
 <script>
-export default {
-    name: 'AccountPage',
-    data() {
-        return {
-            trafficLights: []
-        };
-    },
-    methods: {
-        async fetchTrafficLights() {
-            this.trafficLights = await window.dbAPI.getAll();
-        }
-    },
-    mounted() {
-        this.fetchTrafficLights();
-    }
-};
+    export default {
+        name: 'AccountPage',
+    };
+
 </script>

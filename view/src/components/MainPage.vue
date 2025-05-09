@@ -1,10 +1,10 @@
 <template>
 	<div class="flex w-full flex-grow bg-white border-t border-l border-gray-300 rounded-tl-xl">
 		<div id="side-bar" class="w-1/3 text-left">
-			<component :is="activeComponent" :trafficLights="trafficLights" @focus-request="focusOn"></component>
+			<component :is="activeComponent" :trafficLights="trafficLights"></component>
 		</div>
 		<div v-if="!loadMap">loading map...</div>
-		<RobotsMap ref="mapRef" v-else :trafficLights="trafficLights" class="flex w-2/3 border-l border-gray-300 overflow-hidden" />
+		<RobotsMap v-else :trafficLights="trafficLights" class="flex w-2/3 border-l border-gray-300 overflow-hidden" />
 	</div>
 </template>
 
@@ -16,8 +16,6 @@
 	import AlertsPage from './side-bar/Alerts.vue';
 	import MorePage from './side-bar/More.vue';
 	import AccountPage from './side-bar/Account.vue';
-
-	import { ref } from 'vue';
 
 	import { simulateTrafficLightUpdates } from "@/utils/utils.js";
 
@@ -85,18 +83,6 @@
 				const componentName = this.activeAction.charAt(0).toUpperCase() + this.activeAction.slice(1) + 'Page';
 				return this.$options.components[componentName];
 			},
-		},
-		setup() {
-			const mapRef = ref(null);
-
-			const focusOn = (id) => {
-				mapRef.value?.focusOn(id);
-			};
-
-			return {
-				mapRef,
-				focusOn,
-			};
 		},
 	};
 </script>

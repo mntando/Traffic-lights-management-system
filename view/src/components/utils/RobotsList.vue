@@ -1,7 +1,7 @@
 <template>
 	<div class="flex flex-col flex-grow">
 		<ul>
-		<li v-for="(trafficLight, index) in trafficLights" :key="index" @mouseover="hoverIndex = index" @mouseleave="hoverIndex = -1" @click="$emit('focus-request', trafficLight.id)" class="flex flex-row mb-2 p-3 hover:bg-gray-200 rounded-lg transition-all">
+		<li v-for="(trafficLight, index) in trafficLights" :key="index" @mouseover="hoverIndex = index" @mouseleave="hoverIndex = -1" @click="mapStore.focusOn(trafficLight.id)" class="flex flex-row mb-2 p-3 hover:bg-gray-200 rounded-lg transition-all">
 			<div class="flex flex-col">
 				<div class="font-semibold text-lg">
 					{{ trafficLight.name }}
@@ -23,6 +23,8 @@
 <script>
 	import { message } from '@/utils/utils.js';
 
+	import { useRobotMapStore } from '@/stores/robotMap'
+
 	export default {
 		name: 'RobotsList',
 		props: {
@@ -33,8 +35,12 @@
 		},
 		data() {
 			return {
-				hoverIndex: -1
+				hoverIndex: -1,
 			}
+		},
+		mounted() {
+			// Initialize the map store
+			this.mapStore = useRobotMapStore()
 		},
 		methods: {
 			message,

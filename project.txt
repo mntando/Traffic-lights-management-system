@@ -46,9 +46,7 @@ Map: show map, add markers for robots, show when hoved, click for more (open sea
 - Uninstall leaflet-mbtiles
 
 // Ideas:
-- Get data from MainPage, since it has to render different components (Overview and RobotsMap)
-- MapDiv to emit to MainPage onclick on robots (this emit to change components on MainPage#side-bar)
-- SideBar - control a single robot at a time, click on robot on map show label with the control svg
+- Use Pinia for state management to handle the robot data and interactions between components (in case the app grows larger) (robot data left for now)
 - Show severity levels (e.g., critical faults in red, minor ones in orange) - Provide expand/collapse functionality for detailed fault descriptions.
 
 // Errors:
@@ -65,6 +63,6 @@ Map: show map, add markers for robots, show when hoved, click for more (open sea
 - Do transitions for contents page (someday)
 - Connection button
 - add these colors: text-green-500 
-- do the control section, make it an overlay that opens when a robot is clicked on the map or somewhere else, use (Pinia)
+- do the control section, make it an overlay that opens when a robot is clicked on the map or somewhere else
 - change from emits to Pinia for interactivity between components (MainPage, MapDiv, SideBar)
 
