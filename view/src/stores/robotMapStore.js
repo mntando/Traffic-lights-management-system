@@ -13,3 +13,16 @@ export const useRobotMapStore = defineStore('robotMap', {
 		}
 	}
 })
+
+export const useOverlayStore = defineStore('overlay', {
+	state: () => ({
+		isOpen: false,
+		selectedId: null
+	}),
+	actions: {
+		toggle(id) {
+			this.selectedId = id
+			this.isOpen = !this.isOpen
+		}
+	}
+})

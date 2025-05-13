@@ -23,7 +23,7 @@
 <script>
 	import { message } from '@/utils/utils.js';
 
-	import { useRobotMapStore } from '@/stores/robotMap'
+	import { useRobotMapStore } from '@/stores/robotMapStore'
 
 	export default {
 		name: 'RobotsList',

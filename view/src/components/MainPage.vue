@@ -70,7 +70,6 @@
 				// Show the component after loading
 				this.loadMap = true;
 			},
-
 			beforeDestroy() {
 				// Stop simulation when component is destroyed
 				if (this.stopSimulation) {

@@ -44,7 +44,8 @@
 	import L from "leaflet";
 	import { message } from "@/utils/utils.js";
 
-	import { useRobotMapStore } from "@/stores/robotMap";
+	import { useOverlayStore } from '@/stores/robotMapStore'; 
+	import { useRobotMapStore } from "@/stores/robotMapStore";
 
 	export default {
 		name: "RobotsMap",
@@ -71,9 +72,6 @@
 					this.updateTrafficLights();
 				},
 			},
-
-			// Watch for changes in focusTargetId from the store
-
 		},
 		mounted() {
 			this.initMap();
@@ -90,10 +88,7 @@
 			// Focus on a specific marker when focusTargetId changes
 			this.mapStore = useRobotMapStore();
 			this.unsub = this.mapStore.$subscribe((mutation, state) => {
-				if (
-					mutation.storeId === 'robotMap' &&
-					mutation.events.key === 'focusTargetId'
-				) {
+				if (mutation.storeId === 'robotMap' && mutation.events.key === 'focusTargetId') {
 					const id = state.focusTargetId;
 					if (id) {
 						this.focusOn(id);
@@ -128,14 +123,24 @@
 						</div>`;
 			},
 			addTrafficLights() {
+				const attachPopupEventListener = (id) => {
+					const a = document.querySelector(`.overlay-more[data-id='${id}']`);
+					if (a) {
+						a.addEventListener('click', (e) => {
+							e.preventDefault();
+							this.toggleOverlay(id); // works correctly
+						});
+					}
+				}
+
 				this.trafficLights.forEach((light) => {
 					const id = light.id || light.name;
 					const location = JSON.parse(light.location);
 					const color = message(light.code).color;
 					const html = this.getTrafficLightMarkerHtml(id, color);
 					const label = `<span class='text-lg'>${light.name}</span><br>
-						<span class="text-${color}-500">${message(light.code).msg}</span><br>
-						<a class='hover:underline'>more</a>`;
+						<span class='text-${color}-500'>${message(light.code).msg}</span><br>
+						<a href="#" class='overlay-more hover:underline cursor-pointer' data-id='${light.id}'>more</a>`;
 
 					const existing = this.markers[id];
 
@@ -148,6 +153,11 @@
 						// Update popup content
 						if (existing.getPopup().getContent() !== label) {
 							existing.setPopupContent(label);
+
+							// Re-attach the event listener to the existing marker
+							if (existing.isPopupOpen()) {
+								attachPopupEventListener(light.id);
+							}
 						}
 						// Update icon
 						const newIcon = L.divIcon({
@@ -156,6 +166,11 @@
 							iconSize: [30, 30],
 						});
 						existing.setIcon(newIcon);
+						// Add event listener to the existing marker
+						existing.off('popupopen').on('popupopen', () => {
+							attachPopupEventListener(light.id);
+						});
+
 					} else {
 						// New marker
 						const marker = L.marker([location.lat, location.lng], {
@@ -166,14 +181,13 @@
 							}),
 						}).bindPopup(label).addTo(this.map);
 						this.markers[id] = marker;
+
+						// Add listener for new marker
+						marker.on('popupopen', () => {
+							attachPopupEventListener(light.id);
+						});
 					}
 				});
-			},
-			clearMarkers() {
-				Object.values(this.markers).forEach(marker => {
-					marker.remove();
-				});
-				this.markers = {};
 			},
 			updateTrafficLights() {
 				if (!this.map) return;
@@ -219,6 +233,10 @@
 					});
 				}
 			},
+			toggleOverlay(id) {
+                const overlay = useOverlayStore()
+                overlay.toggle(id)
+            },
 			message,
 		},
 		beforeUnmount() {

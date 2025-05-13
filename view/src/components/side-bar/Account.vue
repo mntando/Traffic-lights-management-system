@@ -1,5 +1,5 @@
 <template>
-    <div class="flex flex-col h-full p-4 space-y-4 scrollable">
+    <div @click="toggleOverlay" class="flex flex-col h-full p-4 space-y-4 scrollable">
         <button class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600">
             Test
         </button>
@@ -7,8 +7,15 @@
 </template>
 
 <script>
+    import { useOverlayStore } from '@/stores/robotMapStore'; 
+
     export default {
         name: 'AccountPage',
+        methods: {
+            toggleOverlay() {
+                const overlay = useOverlayStore()
+                overlay.toggle()
+            }
+        }
     };
-
 </script>
