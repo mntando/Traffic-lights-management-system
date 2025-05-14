@@ -14,7 +14,7 @@
         methods: {
             toggleOverlay() {
                 const overlay = useOverlayStore()
-                overlay.toggle()
+                overlay.toggle(1)
             }
         }
     };

@@ -55,7 +55,7 @@
 				this.trafficLights = allTrafficlights.map(tl => ({
 					id: tl.id,
 					name: tl.name,
-					location: tl.location,
+					location: JSON.parse(tl.location),
 					code: null,
 				}));
 

@@ -1,5 +1,6 @@
 <template>
-	<div class="map-container">
+	<div ref="mapWrapper" class="map-container">
+		<RobotOverlay v-if="isOverlayOpen" :trafficLight="trafficLights[this.overlayStore.selectedId - 1]" class="absolute"/>
 		<div id="map" class="relative w-full h-full">
 			<div class="absolute top-4 left-4 flex flex-col space-y-3">
 				<button @click="zoomIn" class="bg-white shadow p-2 border border-gray-300 rounded-full transition duration-100 ease-in-out transform hover:scale-110" aria-label="Zoom In">
@@ -44,6 +45,8 @@
 	import L from "leaflet";
 	import { message } from "@/utils/utils.js";
 
+	import RobotOverlay from './RobotOverlay.vue';
+
 	import { useOverlayStore } from '@/stores/robotMapStore'; 
 	import { useRobotMapStore } from "@/stores/robotMapStore";
 
@@ -55,6 +58,9 @@
 				required: true,
 			}
 		},
+		components: {
+			RobotOverlay,
+		},
 		data() {
 			return {
 				map: null,
@@ -63,6 +69,8 @@
 
 				onTown: true,
 				isFullScreen: false,
+
+				isOverlayOpen: false,
 			};
 		},
 		watch: {
@@ -94,6 +102,14 @@
 						this.focusOn(id);
 						this.mapStore.clearFocus();
 					}
+				}
+			});
+
+			// Watch overlay store for changes
+			this.overlayStore = useOverlayStore()
+			this.unsub = this.overlayStore.$subscribe((mutation, state) => {
+				if (mutation.storeId === 'overlay' && mutation.events && mutation.events.key === 'isOpen') {
+					this.isOverlayOpen = state.isOpen
 				}
 			});
 
@@ -135,7 +151,7 @@
 
 				this.trafficLights.forEach((light) => {
 					const id = light.id || light.name;
-					const location = JSON.parse(light.location);
+					const location = (light.location);
 					const color = message(light.code).color;
 					const html = this.getTrafficLightMarkerHtml(id, color);
 					const label = `<span class='text-lg'>${light.name}</span><br>
@@ -204,18 +220,15 @@
 				}
 			},
 			toggleFullScreen() {
-				if (this.map) {
-					if (!document.fullscreenElement) {
-						this.map.getContainer().requestFullscreen();
-						setTimeout(() => {
-							this.isFullScreen = true;
-						}, 100);
-					} else {
-						document.exitFullscreen();
-						setTimeout(() => {
-							this.isFullScreen = false;
-						}, 100);
-					}
+				const wrapper = this.$refs.mapWrapper
+				if (!document.fullscreenElement) {
+					wrapper.requestFullscreen().then(() => {
+						this.isFullScreen = true
+					})
+				} else {
+					document.exitFullscreen().then(() => {
+						this.isFullScreen = false
+					})
 				}
 			},
 			goToTown() {
