@@ -66,3 +66,12 @@ Map: show map, add markers for robots, show when hoved, click for more (open sea
 - do the control section, make it an overlay that opens when a robot is clicked on the map or somewhere else
 - change from emits to Pinia for interactivity between components (MainPage, MapDiv, SideBar)
 
+// Onresume:
+- Detection Strategy (Per Node)
+    Capture image periodically (e.g. every 2 seconds).
+    Run TinyML on esp32 model to classify:
+    No vehicle
+    Normal vehicle
+    Emergency vehicle
+    If status changes, send alert via ESP-NOW:
+    { "node_id": 3, "type": "emergency_vehicle" }

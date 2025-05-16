@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<div class="border border-gray-300 rounded-lg">
+		<div class="border border-gray-300 rounded-xl">
 			<div class="bar-graph">
 				<div class="bar bg-green-500" :style="{ width: bar1Width }">
 					<span class="percentage" :class="{ 'fade-in': showPercentages }">
