@@ -113,5 +113,4 @@ This project is licensed under the [MIT License](LICENSE).
 
 For any questions or suggestions, please contact:
 - **Author**: MV
-- **Email**: [mvntando@gmail.com]
 - **GitHub**: [github.com/mntando](https://github.com/mntando)
