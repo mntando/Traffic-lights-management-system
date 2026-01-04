@@ -1,25 +1,86 @@
+
 # Traffic Lights Management System
 
-This repository contains the **Traffic Lights Management System**, a project designed to optimize and manage traffic light operations for efficient traffic flow and improved safety. Developed as part of an electronics engineering final project, this system leverages modern tools and techniques to address real-world traffic challenges.
+This repository contains the **Traffic Lights Management System**, a desktop application designed to monitor and manage traffic light operations for efficient traffic flow and improved safety.
+
+> **Developed as part of an electronics engineering final project**
+
+The system supports both **simulation-based operation** (for development and demonstration) and **real hardware integration** using a distributed ESP32 mesh network.
+
+![Traffic Lights Demo](view/src/assets/screenshot.png)
 
 ---
 
 ## Features
 
-- **Real-Time Control**: Manage traffic light sequences dynamically based on traffic conditions.
-- **Customizable Timings**: Configure light timings for various scenarios (e.g., peak hours, emergencies).
-- **Scalable Design**: Easily adaptable to intersections of different sizes.
-- **Fault Detection**: Monitor the status of traffic lights to identify and alert for faults.
-- **User-Friendly Interface**: Simple interface for operators to adjust settings.
+- **Real-Time Traffic Light Monitoring**
+  - Live updates of traffic light states
+  - Bitmask-based status representation
+
+- **Simulation Mode (Default)**
+  - Generates realistic traffic light behavior
+  - Used for development, testing, and demonstrations
+  - No hardware required
+
+- **Hardware Mode (Optional)**
+  - Receives real-time updates from ESP32 devices
+  - Designed for offline, local-network operation
+  - No internet connection required
+
+- **Scalable Design**
+  - Supports multiple intersections and traffic lights
+
+- **Desktop Application**
+  - Runs as a standalone Electron app
+  - Cross-platform support (Windows, Linux)
 
 ---
 
 ## Technologies Used
 
-- **Frontend**: Vue.js for building a responsive and interactive user interface.
-- **Backend**: Node.js for managing business logic and real-time updates.
-- **Microcontroller**: MicroPython for handling traffic light hardware control.
-- **Database**: SQLite for storing configurations and historical data.
+### Desktop Application
+- **Electron** – Desktop application framework
+- **Vue.js** – Frontend UI
+- **Node.js** – Application backend and IPC handling
+
+### Hardware & Networking
+- **ESP32**
+- **ESP-NOW Mesh Networking**
+- **WebSocket (local network only)**
+
+---
+
+## Architecture Overview
+
+```
+Simulation Mode:
+┌──────────────────┐
+│ Simulation Logic │
+└─────────┬────────┘
+          ▼
+┌──────────────────┐
+│ Electron + Vue UI│
+└──────────────────┘
+
+Hardware Mode:
+┌──────────────────┐
+│ ESP32 Nodes      │
+│ (ESP-NOW Mesh)   │
+└─────────┬────────┘
+          ▼
+┌──────────────────┐
+│ ESP32 MASTER     │
+│(WebSocket Server)│
+└─────────┬────────┘
+          ▼
+┌──────────────────┐
+│ Electron + Vue UI│
+└──────────────────┘
+```
+
+- ESP-NOW is used for **local, low-latency mesh communication**
+- WebSocket is used for **real-time monitoring**
+- The system works **fully offline** on a local Wi-Fi or hotspot network
 
 ---
 
@@ -27,90 +88,112 @@ This repository contains the **Traffic Lights Management System**, a project des
 
 ### Prerequisites
 
-Ensure you have the following installed on your system:
-- [Node.js](https://nodejs.org/) and npm
-- [Vue CLI](https://cli.vuejs.org/)
-- Python (for MicroPython integrations)
+Ensure you have the following installed:
+- **Node.js** (LTS recommended)
+- **npm**
+- A supported OS (Windows / Linux)
+
+---
 
 ### Steps
 
-1. **Clone the Repository**:
+1. **Clone the repository**
    ```bash
    git clone https://github.com/mntando/Traffic-lights-management-system.git
    cd Traffic-lights-management-system
    ```
 
-2. **Install Dependencies**:
+2. **Install dependencies**
+
    ```bash
    npm install
    ```
 
-3. **Run the Application**:
+3. **Run the application**
+
    ```bash
    npm run dev
    ```
-
-4. **Hardware Setup**:
-   - Connect the traffic light system hardware to the microcontroller.
-   - Flash the MicroPython script provided in the `hardware/` directory to your microcontroller.
 
 ---
 
 ## Usage
 
-1. Start the server using the installation steps above.
-2. Access the application via `http://localhost:8080` in your web browser.
-3. Configure the traffic light timings and monitor live traffic updates.
+### Simulation Mode (Default)
+
+* Launch the application
+* Traffic lights update automatically using simulated data
+* No configuration or hardware required
+
+### Hardware Mode (Optional)
+
+* Requires an ESP32-based traffic light system
+* The desktop app listens for real-time updates over WebSocket
+* ESP32 devices and the PC must be on the **same local network**
+  (e.g. PC hotspot or router)
+
+Hardware mode is disabled by default and can be enabled in the application logic.
 
 ---
 
-## Project Structure
+## Hardware Integration
 
-```
-Traffic-lights-management-system/
-├── src/
-│   ├── components/     # Vue.js components
-│   ├── views/          # Application views
-│   ├── assets/         # Static assets
-│   ├── App.vue         # Main Vue.js file
-│   └── main.js         # Application entry point
-├── backend/            # Backend logic (Node.js)
-├── hardware/           # MicroPython scripts for traffic light control
-├── public/             # Static public files
-├── package.json        # Project dependencies
-└── README.md           # Project documentation
-```
+This repository **does not contain hardware code**.
+
+The system is designed to work with a **distributed ESP32 mesh network** implemented using ESP-NOW, where:
+
+* Multiple ESP32 nodes control traffic lights
+* A MASTER ESP32 aggregates mesh data
+* The MASTER ESP32 exposes a **local WebSocket server**
+* The desktop application connects to it over the local network
+
+### Reference Implementation
+
+All hardware-related logic is implemented in a separate repository:
+
+🔗 **ENowMesh – ESP32 Mesh Networking**
+[https://github.com/mntando/ENowMesh](https://github.com/mntando/ENowMesh)
+
+Please refer to that repository for:
+
+* ESP32 firmware
+* ESP-NOW mesh configuration
+* Message formats
+* Hardware setup details
 
 ---
 
 ## Contribution
 
-Contributions are welcome! Follow these steps to contribute:
-1. Fork the repository.
-2. Create a new branch:
+Contributions are welcome.
+
+1. Fork the repository
+2. Create a new branch
+
    ```bash
    git checkout -b feature-name
    ```
-3. Commit your changes:
+3. Commit your changes
+
    ```bash
    git commit -m "Add feature-name"
    ```
-4. Push to the branch:
+4. Push the branch
+
    ```bash
    git push origin feature-name
    ```
-5. Create a pull request.
+5. Open a Pull Request
 
 ---
 
 ## License
 
-This project is licensed under the [MIT License](LICENSE).
+This project is licensed under the **MIT License**.
 
 ---
 
-## Contact
+## Author
 
-For any questions or suggestions, please contact:
-- **Author**: MV
-- **GitHub**: [github.com/mntando](https://github.com/mntando)
+* **Author:** MV
+* **GitHub:** [https://github.com/mntando](https://github.com/mntando)

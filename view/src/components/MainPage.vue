@@ -18,6 +18,9 @@
 	import AccountPage from './side-bar/Account.vue';
 
 	import { simulateTrafficLightUpdates } from "@/utils/utils.js";
+	import { listenTrafficLightUpdates } from "@/utils/utils.js";
+
+	const USE_HARDWARE = false;
 
 	export default {
 		name: 'MainPage',
@@ -60,12 +63,50 @@
 				}));
 
 				// Start simulation and update codes in real-time
-				this.stopSimulation = simulateTrafficLightUpdates((update) => {
-					const index = this.trafficLights.findIndex(tl => tl.id.toString() === update.id);
-					if (index !== -1) {
-						this.trafficLights[index].code = update.code;
-					}
-				}, 30000, this.trafficLights.length); // TODO: time 30 seconds
+				if (this.stopSimulation) {
+					this.stopSimulation();
+					this.stopSimulation = null;
+				}
+
+				if (!USE_HARDWARE) {
+					this.stopSimulation = simulateTrafficLightUpdates((update) => {
+						const index = this.trafficLights.findIndex(tl => tl.id.toString() === update.id);
+						if (index !== -1) {
+							this.trafficLights[index].code = update.code;
+						}
+					}, 30000, this.trafficLights.length); // TODO: time 30 seconds
+				} else {
+
+				/**
+				 * ╔════════════════════════════════════════════════════════════════════════════════╗
+				 * ║                         WEBSOCKET ALTERNATIVE APPROACH                         ║
+				 * ║                                                                                ║
+				 * ║ PURPOSE: Real-time traffic light status updates via WebSocket connection       ║
+				 * ║                                                                                ║
+				 * ║ HOW IT WORKS:                                                                  ║
+				 * ║  - Establishes a WebSocket listener for continuous traffic light updates       ║
+				 * ║  - Receives update objects containing: id (string) and code (string)           ║
+				 * ║  - Matches incoming updates to traffic lights by ID                            ║
+				 * ║  - Updates the 'code' property (light status: red/yellow/green)                ║
+				 * ║                                                                                ║
+				 * ║ RETURN VALUE: Function reference stored in this.stopSimulation                 ║
+				 * ║               - Can be called to disconnect/cleanup the WebSocket listener     ║
+				 * ║                                                                                ║
+				 * ║ NOTE: Currently disabled in favor of [INSERT_CURRENT_APPROACH_HERE]            ║
+				 * ║       Consider re-enabling for real-time updates without polling               ║
+				 * ║                                                                                ║
+				 * ╚════════════════════════════════════════════════════════════════════════════════╝
+				 */
+
+					this.stopSimulation = listenTrafficLightUpdates((update) => {
+						const index = this.trafficLights.findIndex(
+							tl => tl.id.toString() === update.id
+						);
+						if (index !== -1) {
+							this.trafficLights[index].code = update.code;
+						}
+					});
+				}
 
 				// Show the component after loading
 				this.loadMap = true;

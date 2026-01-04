@@ -75,3 +75,8 @@ Map: show map, add markers for robots, show when hoved, click for more (open sea
     Emergency vehicle
     If status changes, send alert via ESP-NOW:
     { "node_id": 3, "type": "emergency_vehicle" }
+
+- to use hardware:
+    const USE_HARDWARE = false;
+    Location: MainPage.vue
+    This is the single source of truth for mode selection.

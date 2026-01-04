@@ -20,6 +20,7 @@
   },
   "dependencies": {
     "better-sqlite3": "^11.7.2",
-    "pinia": "^3.0.2"
+    "pinia": "^3.0.2",
+    "ws": "^latest"
   }
 }

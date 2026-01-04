@@ -19,3 +19,20 @@ contextBridge.exposeInMainWorld('dbAPI', {
 	add: (name, location) => ipcRenderer.invoke('add-traffic-light', { name, location }),
 	delete: (id) => ipcRenderer.invoke('delete-traffic-light', id),
 });
+
+// Traffic light listener API
+contextBridge.exposeInMainWorld('trafficAPI', {
+	start: () => ipcRenderer.invoke('start-traffic-listener'),
+	stop: () => ipcRenderer.invoke('stop-traffic-listener'),
+
+	onUpdate: (callback) => {
+		const handler = (_event, data) => callback(data);
+
+		ipcRenderer.on('traffic-light-update', handler);
+
+		// Return unsubscribe function
+		return () => {
+			ipcRenderer.removeListener('traffic-light-update', handler);
+		};
+	}
+});

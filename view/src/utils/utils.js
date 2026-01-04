@@ -26,38 +26,41 @@ export function message(code) {
 
 // Function to generate random traffic light updates
 export function simulateTrafficLightUpdates(callback, interval, number) {
-    // Common traffic light states (will appear more frequently)
     const commonCodes = [1];
     
-    // Track IDs and their current codes
     const trafficLights = Array.from({ length: number }, (_, i) => ({ id: (i + 1).toString() }));
     
     const intervalId = setInterval(() => {
-        // Generate updates for all traffic lights
         trafficLights.forEach(light => {
-            // Determine if we should use a common code (80% chance) or random 0-31
             const useCommonCode = Math.random() < 0.8;
-            let code = useCommonCode 
-                ? commonCodes[Math.floor(Math.random() * commonCodes.length)]
-                : Math.floor(Math.random() * 32);
-
-            // If the code includes 'Unresponsive' (bit 4), strip all other bits
+            let code = useCommonCode ? commonCodes[Math.floor(Math.random() * commonCodes.length)] : Math.floor(Math.random() * 32);
             if (code & 0b10000) {
                 code = 0b10001;
             }
 
-            // Create the JSON output
-            const update = {
-                id: light.id,
-                code: code
-            };
-
-            callback(update);
+            callback({ id: light.id, code });
         });
-
     }, interval);
     
-    // Return function to stop the simulation
     return () => clearInterval(intervalId);
 }
- 
+
+
+// Listen for traffic light updates via Electron preload
+export function listenTrafficLightUpdates(callback) {
+	if (!window.trafficAPI) {
+		console.error('trafficAPI not available');
+		return () => {};
+	}
+
+	window.trafficAPI.start();
+
+	// CAPTURE unsubscribe
+	const unsubscribe = window.trafficAPI.onUpdate(callback);
+
+	// Cleanup
+	return () => {
+		unsubscribe();
+		window.trafficAPI.stop();
+	};
+}

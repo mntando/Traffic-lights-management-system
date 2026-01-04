@@ -1,6 +1,7 @@
 const { app, BrowserWindow, ipcMain, globalShortcut } = require('electron');
 const path = require('path');
 const db = require('./sqlite.js');
+const WebSocket = require('ws');
 
 let win;
 
@@ -68,6 +69,71 @@ ipcMain.handle('add-traffic-light', async (event, { name, location }) => {
 	return db.addTrafficLight(name, location);
 });
 
- ipcMain.handle('delete-traffic-light', async (event, id) => {
+ipcMain.handle('delete-traffic-light', async (event, id) => {
 	return db.deleteTrafficLight(id);
 });
+
+
+// --- Traffic Light WebSocket ---
+let trafficSocket = null;
+let reconnectTimer = null;
+
+const ESP32_WS_URL = 'ws://192.168.137.42:81'; // <-- set once
+
+function startTrafficLightListener() {
+    if (trafficSocket) return;
+
+    console.log('Connecting to ESP32 traffic server...');
+    trafficSocket = new WebSocket(ESP32_WS_URL);
+
+    trafficSocket.on('message', (data) => {
+        let payload;
+
+        try {
+            payload = JSON.parse(data.toString());
+        } catch {
+            return;
+        }
+
+        const updates = Array.isArray(payload) ? payload : [payload];
+
+        updates.forEach(({ id, code }) => {
+            if (typeof id !== 'string' || typeof code !== 'number') return;
+
+            if (code & 0b10000) {
+                code = 0b10001;
+            }
+
+            BrowserWindow.getAllWindows().forEach(win => {
+                win.webContents.send('traffic-light-update', { id, code });
+            });
+        });
+    });
+
+    trafficSocket.on('close', () => {
+        console.warn('Traffic WS closed, retrying...');
+        trafficSocket = null;
+
+        reconnectTimer = setTimeout(startTrafficLightListener, 3000);
+    });
+
+    trafficSocket.on('error', (err) => {
+        console.error('Traffic WS error:', err.message);
+    });
+}
+
+function stopTrafficLightListener() {
+    if (reconnectTimer) {
+        clearTimeout(reconnectTimer);
+        reconnectTimer = null;
+    }
+
+    if (trafficSocket) {
+        trafficSocket.close();
+        trafficSocket = null;
+    }
+}
+
+// IPC control
+ipcMain.handle('start-traffic-listener', startTrafficLightListener);
+ipcMain.handle('stop-traffic-listener', stopTrafficLightListener);
